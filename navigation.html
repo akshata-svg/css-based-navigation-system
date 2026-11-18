@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Responsive navigation components built with semantic HTML and layered CSS.">
+  <title>Navigation System</title>
+  <style>
+    @layer reset, tokens, layout, components, states, responsive;
+
+    @layer reset {
+      *, *::before, *::after { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body { margin: 0; }
+      a { color: inherit; text-decoration: none; }
+      summary { cursor: pointer; list-style: none; }
+      summary::-webkit-details-marker { display: none; }
+    }
+
+    @layer tokens {
+      :root {
+        --primary-color: #f58f09;
+        --hover-color: #65bb4e;
+        --text-color: #20302a;
+        --muted-color: #68766f;
+        --border-color: #dce3dd;
+        --page-color: #f7f9f6;
+        --surface-color: #fff;
+      }
+    }
+
+    @layer layout {
+      body {
+        color: var(--text-color);
+        background: var(--page-color);
+        font: 16px/1.5 system-ui, sans-serif;
+      }
+
+      main {
+        width: min(1080px, 100% - 48px);
+        margin: auto;
+        padding: 48px 0;
+      }
+
+      .intro { margin-bottom: 32px; }
+      .intro h1 { margin: 0 0 8px; font-size: clamp(30px, 5vw, 46px); line-height: 1.1; }
+      .intro p { max-width: 650px; color: var(--muted-color); }
+      .content-grid { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 24px; }
+      .component-list { min-width: 0; }
+      footer { padding: 20px 24px; text-align: center; color: var(--muted-color); border-top: 1px solid var(--border-color); }
+    }
+
+    @layer components {
+      .skip-link { position: absolute; top: -50px; left: 12px; z-index: 20; padding: 8px; background: var(--surface-color); }
+      .navbar {
+        position: relative;
+        z-index: 10;
+        min-height: 64px;
+        padding: 0 6%;
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        background: var(--surface-color);
+        border-bottom: 1px solid var(--border-color);
+      }
+      .site-name { margin-right: auto; font-size: 18px; font-weight: 700; }
+      .nav-links { display: flex; align-items: center; gap: 24px; }
+      .nav-links > a, .nav-dropdown > summary { padding: 20px 0; color: var(--muted-color); }
+      .nav-dropdown { position: relative; }
+      .nav-dropdown > summary::after { content: " ▾"; }
+      .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 5;
+        display: none;
+        width: 210px;
+        padding: 8px;
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
+        box-shadow: 0 8px 20px #18251d18;
+      }
+      .dropdown-menu a { display: block; padding: 10px; }
+      .mega-menu { left: auto; right: -80px; width: min(560px, 90vw); padding: 20px; }
+      .mega-menu h2 { grid-column: 1 / -1; margin: 0 0 8px; font-size: 18px; }
+      .mega-menu a { padding: 8px; }
+      .button { padding: 9px 14px; color: white; background: var(--primary-color); }
+
+      .drawer-toggle, .menu-button, .mobile-drawer, .drawer-backdrop { display: none; }
+      .menu-button span { width: 20px; height: 2px; background: var(--text-color); }
+
+      .sidebar, .panel {
+        padding: 18px;
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
+      }
+      .sidebar h2 { margin: 0 0 10px; font-size: 14px; }
+      .sidebar a { display: block; padding: 8px; color: var(--muted-color); }
+      .panel { margin-bottom: 20px; }
+      .panel h2 { margin: 0 0 14px; font-size: 19px; }
+      .about-editor { display: grid; gap: 8px; }
+      .about-editor label { font-weight: 600; }
+      .about-editor textarea { width: 100%; min-height: 120px; padding: 12px; color: var(--text-color); font: inherit; border: 1px solid var(--border-color); resize: vertical; }
+      .about-editor textarea:focus { outline: 2px solid var(--primary-color); outline-offset: 2px; }
+      .about-editor p { margin: 0; color: var(--muted-color); font-size: 13px; }
+      .contact-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+      .contact-card { padding: 14px; border: 1px solid var(--border-color); }
+      .contact-card h3 { margin: 0 0 8px; font-size: 16px; }
+      .contact-card p, .contact-card address { margin: 4px 0; color: var(--muted-color); font-size: 14px; font-style: normal; }
+      .contact-card a { color: var(--primary-color); }
+      .sample-navbar {
+        padding: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 16px;
+        border: 1px solid var(--border-color);
+      }
+      .sample-navbar > strong { margin-right: auto; }
+      .sample-navbar a, .sample-navbar summary { color: var(--muted-color); }
+      .sample-dropdown { position: relative; }
+      .sample-dropdown > summary::after { content: " ▾"; }
+      .sample-dropdown .dropdown-menu { top: 24px; }
+
+      .tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--border-color); }
+      .tabs input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+      .tabs label { padding: 9px 14px; cursor: pointer; color: var(--muted-color); }
+      .tab-content { display: none; width: 100%; padding: 14px 4px 4px; }
+      .breadcrumbs { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted-color); }
+      .breadcrumbs [aria-current="page"] { color: var(--text-color); font-weight: 700; }
+      pre { max-width: 100%; overflow-x: auto; padding: 14px; background: #f0f3ef; font-size: 13px; }
+    }
+
+    @layer states {
+      .skip-link:focus { top: 8px; }
+      .nav-links > a, .mobile-drawer > a { border-bottom: 2px solid transparent; }
+      .nav-links > a[aria-current="page"],
+      .mobile-drawer > a[aria-current="page"] {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+      }
+      .nav-dropdown > summary[aria-current="page"],
+      .dropdown-menu a[aria-current="page"] {
+        color: var(--primary-color);
+        background: var(--hover-color);
+      }
+      .nav-links a:hover, .nav-dropdown > summary:hover,
+      .sample-navbar a:hover, .sample-navbar summary:hover { color: var(--primary-color); }
+      .dropdown-menu a:hover, .sidebar a:hover, .tabs label:hover { background: var(--hover-color); }
+      .sidebar a:hover { color: var(--primary-color); }
+      .breadcrumbs a:hover { color: var(--primary-color); text-decoration: underline; }
+      .button:hover { color: var(--text-color); background: var(--hover-color); }
+      .nav-dropdown[open] > .dropdown-menu,
+      .nav-dropdown:hover > .dropdown-menu,
+      .nav-dropdown:focus-within > .dropdown-menu,
+      .sample-dropdown[open] > .dropdown-menu,
+      .sample-dropdown:hover > .dropdown-menu,
+      .sample-dropdown:focus-within > .dropdown-menu { display: block; }
+      .nav-dropdown[open] > .mega-menu,
+      .nav-dropdown:hover > .mega-menu,
+      .nav-dropdown:focus-within > .mega-menu {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+      }
+      #tab-overview:checked ~ .tab-labels label[for="tab-overview"],
+      #tab-activity:checked ~ .tab-labels label[for="tab-activity"],
+      #tab-settings:checked ~ .tab-labels label[for="tab-settings"] {
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--primary-color);
+      }
+      #tab-overview:checked ~ .tab-content.tab-overview,
+      #tab-activity:checked ~ .tab-content.tab-activity,
+      #tab-settings:checked ~ .tab-content.tab-settings { display: block; }
+      .tabs input:focus-visible + label { outline: 2px solid var(--primary-color); }
+    }
+
+    @layer responsive {
+      @media (max-width: 680px) {
+        main { width: min(100% - 32px, 560px); padding: 32px 0; }
+        .navbar { min-height: 60px; padding: 0 18px; justify-content: space-between; }
+        .site-name { margin: 0; }
+        .nav-links, .navbar > .button { display: none; }
+        .drawer-toggle { position: absolute; width: 1px; height: 1px; opacity: 0; }
+        .menu-button {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 5px;
+          cursor: pointer;
+        }
+        .drawer-backdrop { position: fixed; inset: 60px 0 0; z-index: 8; background: #0006; }
+        .mobile-drawer {
+          position: fixed;
+          top: 60px;
+          right: 0;
+          bottom: 0;
+          z-index: 9;
+          width: min(320px, 88vw);
+          padding: 20px;
+          display: none;
+          flex-direction: column;
+          gap: 4px;
+          background: var(--surface-color);
+        }
+        .drawer-toggle:checked ~ .drawer-backdrop { display: block; }
+        .drawer-toggle:checked ~ .mobile-drawer { display: flex; }
+        .mobile-drawer > a, .mobile-drawer summary { padding: 12px 4px; border-bottom: 1px solid var(--border-color); }
+        .mobile-drawer .dropdown-menu { position: static; width: auto; padding: 0 0 0 14px; border: 0; box-shadow: none; }
+        .mobile-drawer details[open] > .dropdown-menu,
+        .mobile-drawer details:hover > .dropdown-menu,
+        .mobile-drawer details:focus-within > .dropdown-menu { display: block; }
+        .content-grid { grid-template-columns: minmax(0, 1fr); }
+        .component-list { min-width: 0; }
+        .sidebar { display: flex; flex-wrap: wrap; gap: 4px; }
+        .sidebar h2 { width: 100%; }
+        .sample-navbar { gap: 12px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+      }
+    }
+  </style>
+</head>
+<body data-navigation-api="/api/navigation">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="navbar">
+    <a class="site-name" href="#main">Navigation</a>
+    <input class="drawer-toggle" type="checkbox" id="drawer-toggle" aria-label="Toggle navigation menu">
+    <label class="menu-button" for="drawer-toggle" aria-label="Open navigation menu"><span></span><span></span><span></span></label>
+
+    <nav class="nav-links" id="primary-nav" aria-label="Main navigation">
+      <a href="#main">Home</a>
+      <details class="nav-dropdown">
+        <summary>Products</summary>
+        <div class="dropdown-menu"><a href="#menus">Overview</a><a href="#menus">Features</a><a href="#menus">Pricing</a></div>
+      </details>
+      <details class="nav-dropdown">
+        <summary>More</summary>
+        <div class="dropdown-menu mega-menu">
+          <h2>Explore</h2><a href="#tabs">Tabs</a><a href="#breadcrumbs">Breadcrumbs</a>
+          <a href="#schema">Menu schema</a><a href="#menus">Dropdown menu</a>
+        </div>
+      </details>
+      <a href="#contacts">Contact</a>
+    </nav>
+    <a class="button" href="#menus">Get started</a>
+
+    <label class="drawer-backdrop" for="drawer-toggle" aria-label="Close navigation menu"></label>
+    <nav class="mobile-drawer" id="mobile-nav" aria-label="Mobile navigation">
+      <a href="#main">Home</a>
+      <details>
+        <summary>Products</summary>
+        <div class="dropdown-menu"><a href="#menus">Overview</a><a href="#menus">Features</a><a href="#menus">Pricing</a></div>
+      </details>
+      <details>
+        <summary>More</summary>
+        <div class="dropdown-menu"><a href="#tabs">Tabs</a><a href="#breadcrumbs">Breadcrumbs</a><a href="#schema">Menu schema</a></div>
+      </details>
+      <a href="#contacts">Contact</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">Navigation patterns</h1>
+      <p>Responsive navigation components using semantic HTML and layered CSS.</p>
+    </section>
+
+    <div class="content-grid">
+      <aside class="sidebar" aria-label="Component navigation">
+        <h2>Sections</h2>
+        <nav class="sidebar-links" id="sidebar-links" aria-label="Component sections">
+          <a href="#menus">Menus</a><a href="#tabs">Tabs</a>
+          <a href="#breadcrumbs">Breadcrumbs</a><a href="#contacts">Contacts</a>
+          <a href="#schema">Data</a>
+        </nav>
+      </aside>
+
+      <article class="component-list" aria-label="Navigation components">
+        <section class="panel" id="menus" aria-labelledby="menus-title">
+          <h2 id="menus-title">Dropdown and mega menu</h2>
+          <nav class="sample-navbar" aria-label="Example navigation">
+            <strong>Example site</strong><a href="#main">Home</a>
+            <details class="sample-dropdown">
+              <summary>Services</summary>
+              <div class="dropdown-menu"><a href="#menus">Consulting</a><a href="#menus">Design</a><a href="#menus">Support</a></div>
+            </details>
+            <a href="#breadcrumbs">About</a>
+          </nav>
+          <p>Dropdowns respond to hover, keyboard focus, and click or tap.</p>
+        </section>
+
+        <section class="panel" id="tabs" aria-labelledby="tabs-title">
+          <h2 id="tabs-title">Tabs</h2>
+          <div class="tabs">
+            <input type="radio" name="tabs" id="tab-overview" checked>
+            <input type="radio" name="tabs" id="tab-activity">
+            <input type="radio" name="tabs" id="tab-settings">
+            <div class="tab-labels" role="tablist" aria-label="Example views">
+              <label for="tab-overview" role="tab">Overview</label>
+              <label for="tab-activity" role="tab">Activity</label>
+              <label for="tab-settings" role="tab">Settings</label>
+            </div>
+            <div class="tab-content tab-overview">Overview content goes here.</div>
+            <div class="tab-content tab-activity">Recent activity goes here.</div>
+            <div class="tab-content tab-settings">Settings content goes here.</div>
+          </div>
+        </section>
+
+        <section class="panel" id="breadcrumbs" aria-labelledby="breadcrumb-title">
+          <h2 id="breadcrumb-title">Breadcrumbs</h2>
+          <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <a href="#main">Home</a><span aria-hidden="true">/</span>
+            <a href="#menus">Pages</a><span aria-hidden="true">/</span>
+            <span aria-current="page">Navigation</span>
+          </nav>
+        </section>
+
+        <section class="panel" id="contacts" aria-labelledby="contacts-title">
+          <h2 id="contacts-title">Contacts</h2>
+          <div class="contact-list" id="contact-list">
+            <section class="contact-card">
+              <h3>Akshata Agrawal</h3>
+              <p><a href="tel:7247295540">7247295540</a></p>
+              <address>MITS Gwalior</address>
+            </section>
+            <section class="contact-card">
+              <h3>Vivek Barauliya</h3>
+              <address>MITS Gwalior</address>
+            </section>
+          </div>
+        </section>
+
+        <section class="panel" id="about" aria-labelledby="about-title">
+          <h2 id="about-title">About</h2>
+          <div class="about-editor">
+            <label for="about-copy">About text</label>
+            <textarea id="about-copy" placeholder="Write a short introduction about your organization, team, or work."></textarea>
+            <p id="about-save-status" aria-live="polite">Your text saves automatically on this device.</p>
+          </div>
+        </section>
+
+        <section class="panel" id="schema" aria-labelledby="schema-title">
+          <h2 id="schema-title">Menu schema</h2>
+          <pre><code>CREATE TABLE menus (
+  id INTEGER PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  location VARCHAR(100) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <script type="application/json" id="navigation-config">
+    {
+      "menus": [
+        {
+          "name": "Primary navigation",
+          "location": "header",
+          "created_at": "2026-11-18T00:00:00Z",
+          "items": [
+            { "label": "Home", "href": "#main" },
+            {
+              "label": "Products",
+              "type": "dropdown",
+              "trigger": ["hover", "click"],
+              "items": [
+                { "label": "Overview", "href": "#menus" },
+                { "label": "Features", "href": "#menus" },
+                { "label": "Pricing", "href": "#menus" }
+              ]
+            },
+            {
+              "label": "Explore",
+              "type": "mega-menu",
+              "items": [
+                { "label": "Tabs", "href": "#tabs" },
+                { "label": "Breadcrumbs", "href": "#breadcrumbs" },
+                { "label": "Contacts", "href": "#contacts" },
+                { "label": "Menu schema", "href": "#schema" },
+                { "label": "Dropdown menu", "href": "#menus" }
+              ]
+            },
+            { "label": "Contact", "href": "#contacts" }
+          ]
+        },
+        {
+          "name": "Component navigation",
+          "location": "sidebar",
+          "created_at": "2026-11-18T00:00:00Z",
+          "items": [
+            { "label": "Menus", "href": "#menus" },
+            { "label": "Tabs", "href": "#tabs" },
+            { "label": "Breadcrumbs", "href": "#breadcrumbs" },
+            { "label": "Contacts", "href": "#contacts" },
+            { "label": "Data", "href": "#schema" }
+          ]
+        },
+        {
+          "name": "Mobile drawer",
+          "location": "drawer",
+          "id": "mobile-nav",
+          "toggle_id": "drawer-toggle",
+          "created_at": "2026-11-18T00:00:00Z",
+          "items": [
+            { "label": "Home", "href": "#main" },
+            {
+              "label": "Products",
+              "type": "dropdown",
+              "items": [
+                { "label": "Overview", "href": "#menus" },
+                { "label": "Features", "href": "#menus" },
+                { "label": "Pricing", "href": "#menus" }
+              ]
+            },
+            {
+              "label": "More",
+              "type": "dropdown",
+              "items": [
+                { "label": "Tabs", "href": "#tabs" },
+                { "label": "Breadcrumbs", "href": "#breadcrumbs" },
+                { "label": "Contacts", "href": "#contacts" },
+                { "label": "Menu schema", "href": "#schema" }
+              ]
+            },
+            { "label": "Contact", "href": "#contacts" },
+            { "label": "About", "href": "#about" }
+          ]
+        }
+      ],
+      "contacts": [
+        {
+          "name": "Akshata Agrawal",
+          "phone": "7247295540",
+          "address": "MITS Gwalior"
+        },
+        {
+          "name": "Vivek Barauliya",
+          "address": "MITS Gwalior"
+        }
+      ]
+    }
+  </script>
+  <script>
+    const configElement = document.querySelector("#navigation-config");
+    const fallbackConfig = JSON.parse(configElement.textContent);
+    const primaryNav = document.querySelector("#primary-nav");
+    const mobileNav = document.querySelector("#mobile-nav");
+    const sidebarNav = document.querySelector("#sidebar-links");
+    const contactList = document.querySelector("#contact-list");
+    const drawerToggle = document.querySelector("#drawer-toggle");
+    const aboutCopy = document.querySelector("#about-copy");
+    const aboutSaveStatus = document.querySelector("#about-save-status");
+    const aboutStorageKey = "navigation-about-copy";
+
+    function safeHref(value) {
+      return typeof value === "string" &&
+        (value.startsWith("#") || (value.startsWith("/") && !value.startsWith("//")));
+    }
+
+    function createLink(item) {
+      if (!item || typeof item.label !== "string" || !safeHref(item.href)) return null;
+
+      const link = document.createElement("a");
+      link.href = item.href;
+      link.textContent = item.label;
+      return link;
+    }
+
+    function createNavItem(item) {
+      if (Array.isArray(item.items)) {
+        const group = document.createElement("details");
+        group.className = "nav-dropdown";
+
+        const summary = document.createElement("summary");
+        summary.textContent = item.label;
+
+        const menu = document.createElement("div");
+        menu.className = item.type === "mega-menu" ? "dropdown-menu mega-menu" : "dropdown-menu";
+
+        if (item.type === "mega-menu") {
+          const heading = document.createElement("h2");
+          heading.textContent = item.label;
+          menu.append(heading);
+        }
+
+        item.items.forEach(child => {
+          const link = createLink(child);
+          if (link) menu.append(link);
+        });
+
+        group.append(summary, menu);
+        return group;
+      }
+
+      return createLink(item);
+    }
+
+    function renderLinks(container, items, builder) {
+      container.replaceChildren();
+      items.forEach(item => {
+        const element = builder(item);
+        if (element) container.append(element);
+      });
+    }
+
+    function renderContacts(contacts) {
+      contactList.replaceChildren();
+      contacts.forEach(person => {
+        if (typeof person.name !== "string" || typeof person.address !== "string") return;
+
+        const card = document.createElement("section");
+        card.className = "contact-card";
+        const name = document.createElement("h3");
+        name.textContent = person.name;
+        card.append(name);
+
+        if (typeof person.phone === "string" && /^\d+$/.test(person.phone)) {
+          const phone = document.createElement("a");
+          phone.href = `tel:${person.phone}`;
+          phone.textContent = person.phone;
+          const phoneLine = document.createElement("p");
+          phoneLine.append(phone);
+          card.append(phoneLine);
+        }
+
+        const address = document.createElement("address");
+        address.textContent = person.address;
+        card.append(address);
+        contactList.append(card);
+      });
+    }
+
+    function isNavigationConfig(value) {
+      return value && Array.isArray(value.menus) &&
+        value.menus.some(menu => menu.location === "header" && Array.isArray(menu.items));
+    }
+
+    function renderNavigation(config) {
+      const header = config.menus.find(menu => menu.location === "header");
+      const sidebar = config.menus.find(menu => menu.location === "sidebar");
+      const drawer = config.menus.find(menu => menu.location === "drawer");
+
+      if (!header || !Array.isArray(header.items)) return;
+      renderLinks(primaryNav, header.items, createNavItem);
+      if (drawer && typeof drawer.id === "string" && /^[A-Za-z][A-Za-z0-9_-]*$/.test(drawer.id)) {
+        mobileNav.id = drawer.id;
+        drawerToggle.setAttribute("aria-controls", drawer.id);
+        document.querySelector(".menu-button").setAttribute("aria-controls", drawer.id);
+      }
+      if (drawer && typeof drawer.toggle_id === "string" && /^[A-Za-z][A-Za-z0-9_-]*$/.test(drawer.toggle_id)) {
+        drawerToggle.id = drawer.toggle_id;
+        document.querySelector(".menu-button").htmlFor = drawer.toggle_id;
+        document.querySelector(".drawer-backdrop").htmlFor = drawer.toggle_id;
+      }
+      renderLinks(mobileNav, drawer && Array.isArray(drawer.items) ? drawer.items : header.items, createNavItem);
+      if (sidebar && Array.isArray(sidebar.items)) {
+        renderLinks(sidebarNav, sidebar.items, createLink);
+      }
+      renderContacts(Array.isArray(config.contacts) ? config.contacts : fallbackConfig.contacts);
+      updateActiveLinks();
+    }
+
+    function updateActiveLinks(target = window.location.hash || "#main") {
+      [primaryNav, mobileNav, sidebarNav].forEach(container => {
+        const links = [...container.querySelectorAll("a[href]")];
+        const matchingLinks = links.filter(link => {
+          const href = link.getAttribute("href");
+          if (href === target) return true;
+
+          const destination = new URL(href, window.location.href);
+          if (target.startsWith("#")) return destination.hash === target;
+          if (target.includes("#")) {
+            const targetUrl = new URL(target, window.location.href);
+            return destination.pathname === targetUrl.pathname && destination.hash === targetUrl.hash;
+          }
+          return destination.pathname === target && !destination.hash;
+        });
+        const activeLink = matchingLinks.find(link => link.parentElement === container) || matchingLinks[0];
+
+        links.forEach(link => {
+          if (link === activeLink) link.setAttribute("aria-current", "page");
+          else link.removeAttribute("aria-current");
+        });
+
+        container.querySelectorAll("details").forEach(group => {
+          const summary = group.querySelector("summary");
+          if (group.querySelector('[aria-current="page"]')) summary.setAttribute("aria-current", "page");
+          else summary.removeAttribute("aria-current");
+        });
+      });
+    }
+
+    async function loadNavigation() {
+      const endpoint = document.body.dataset.navigationApi;
+      if (!endpoint || window.location.protocol === "file:") return fallbackConfig;
+
+      try {
+        const response = await fetch(endpoint, { headers: { Accept: "application/json" } });
+        if (!response.ok) throw new Error("Navigation API request failed");
+        const data = await response.json();
+        return isNavigationConfig(data) ? data : fallbackConfig;
+      } catch {
+        return fallbackConfig;
+      }
+    }
+
+    renderNavigation(fallbackConfig);
+    loadNavigation().then(renderNavigation);
+    try {
+      aboutCopy.value = localStorage.getItem(aboutStorageKey) || "";
+    } catch {
+      aboutSaveStatus.textContent = "Text storage is unavailable in this browser.";
+    }
+    aboutCopy.addEventListener("input", () => {
+      try {
+        localStorage.setItem(aboutStorageKey, aboutCopy.value);
+        aboutSaveStatus.textContent = "Saved on this device.";
+      } catch {
+        aboutSaveStatus.textContent = "Unable to save in this browser.";
+      }
+    });
+    window.addEventListener("hashchange", () => updateActiveLinks());
+    document.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (!link || ![primaryNav, mobileNav, sidebarNav].some(container => container.contains(link))) return;
+
+      updateActiveLinks(link.getAttribute("href"));
+      if (mobileNav.contains(link)) drawerToggle.checked = false;
+    });
+  </script>
+  <footer>Responsive navigation demo</footer>
+</body>
+</html>
