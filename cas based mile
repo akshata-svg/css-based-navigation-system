@@ -1,0 +1,45 @@
+ Problem Statement
+A website needs a clear and easy way for users to move from one page to another. Without proper
+navigation, users may find it difficult to locate important pages. The CSS-Based Navigation System will
+create a simple, attractive, and user-friendly navigation menu using HTML and CSS.
+2. Project Objectives
+• Create a simple navigation bar.
+• Help users easily move between web pages.
+• Use CSS to improve the design and appearance.
+• Add hover effects to links.
+• Highlight the active page.
+• Make the navigation easy to understand and use.
+• Make the menu responsive for different screen sizes.
+3. Functional Requirements
+• Display navigation links.
+• Allow users to click links and open different pages.
+• Provide hover effects when the mouse moves over a link.
+• Show which page is currently active.
+• Provide horizontal or vertical navigation.
+• Work correctly on common web browsers.
+• Provide a responsive menu for mobile devices.
+4. Non-Functional Requirements
+• Easy to use: Users should understand the menu quickly.
+• Fast: Navigation should load quickly.
+• Attractive: The design should look clean and professional.
+• Responsive: It should work on computers, tablets, and mobile phones.
+• Reliable: Links should work correctly.
+• Maintainable: CSS should be organized so changes are easy to make.
+5. Feasibility Study
+A. Technical Feasibility
+The project is technically possible because it requires basic web technologies: HTML, CSS, a web
+browser, and a text/code editor. No expensive or advanced software is required.
+B. Economic Feasibility
+The project has low cost because HTML and CSS are free, free code editors can be used, no special
+hardware is required, and development and maintenance costs are low.
+C. Operational Feasibility
+The system is easy to operate because users only need to click navigation links. The interface is simple,
+requires little or no training, and improves the website experience.
+6. Project Scope
+The project will focus on creating a CSS-based navigation menu with navigation links, hover effects,
+active-link styling, a simple layout, and responsive design.
+7. Expected Outcome
+The final system will provide a simple, attractive, responsive, and user-friendly navigation bar that allows
+users to move easily between different pages of a website.
+In Simple Words
+A CSS-based navigation system helps users easily find and open different pages of a website through a
