@@ -1,0 +1,1635 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Wayfinder is a friendly, responsive starting point for finding useful websites and navigating the web.">
+  <title>Wayfinder — Find your way around the web</title>
+  <style>
+    @layer reset, tokens, layout, components, states, responsive;
+
+    @layer reset {
+      *, *::before, *::after { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body { margin: 0; }
+      a { color: inherit; text-decoration: none; }
+      summary { cursor: pointer; list-style: none; }
+      summary::-webkit-details-marker { display: none; }
+    }
+
+    @layer tokens {
+      :root {
+        --primary-color: #29483a;
+        --hover-color: #e7ece1;
+        --text-color: #252820;
+        --muted-color: #6b6d62;
+        --border-color: #e3d8bd;
+        --page-color: #f6f1e4;
+        --surface-color: #fffaf0;
+        --accent-color: #b86f3e;
+      }
+    }
+
+    @layer layout {
+      body {
+        color: var(--text-color);
+        background: var(--page-color);
+        font: 16px/1.5 system-ui, sans-serif;
+      }
+
+      main {
+        width: min(1080px, 100% - 48px);
+        margin: auto;
+        padding: 36px 0 56px;
+      }
+      .panel[id] { scroll-margin-top: 80px; }
+      .link-category[id] { scroll-margin-top: 84px; }
+
+      .opening-page {
+        position: relative;
+        isolation: isolate;
+        min-height: 100vh;
+        min-height: 100svh;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        overflow: hidden;
+        padding: 0 clamp(20px, 6vw, 88px);
+        color: #f7f1df;
+        background:
+          radial-gradient(ellipse at 84% 13%, #caa65728, transparent 28rem),
+          radial-gradient(ellipse at 8% 94%, #bf70452b, transparent 30rem),
+          linear-gradient(135deg, #19372f, #24463a 58%, #1c3c33);
+      }
+      .opening-page::before {
+        position: absolute;
+        top: 10%;
+        right: -200px;
+        z-index: -1;
+        width: 420px;
+        height: 420px;
+        content: "";
+        background: repeating-conic-gradient(from 15deg, #d7b6680a 0 12deg, transparent 12deg 24deg);
+        border: 1px solid #d7b6682b;
+        border-radius: 50%;
+      }
+      .opening-topbar, .opening-layout, .opening-footer { width: min(1120px, 100%); margin: 0 auto; }
+      .opening-topbar { min-height: 76px; display: flex; align-items: center; justify-content: space-between; }
+      .opening-brand { display: inline-flex; align-items: center; gap: 10px; color: #f4ecd5; font-size: 19px; font-weight: 850; letter-spacing: -.04em; }
+      .opening-mark { width: 34px; height: 34px; display: grid; place-items: center; color: #1d392f; background: #d7b668; border-radius: 11px; }
+      .opening-note { color: #d6cfba; font-size: 13px; font-weight: 650; letter-spacing: .04em; }
+      .opening-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(270px, .85fr); gap: clamp(24px, 7vw, 84px); align-items: center; padding: 20px 0 42px; }
+      .opening-copy { max-width: 610px; animation: welcome-in .7s both; }
+      .opening-eyebrow { display: inline-block; margin-bottom: 18px; padding: 7px 12px; color: #eddfb6; background: #ffffff0b; border: 1px solid #d7b66865; border-radius: 999px; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+      .opening-copy h1 { max-width: 620px; margin: 0; color: #fff8e9; font-size: clamp(46px, 7.5vw, 82px); line-height: .99; letter-spacing: -.065em; }
+      .opening-copy p { max-width: 500px; margin: 22px 0 28px; color: #dedccf; font-size: clamp(17px, 2vw, 20px); }
+      .locate-link { min-height: 58px; display: inline-flex; align-items: center; gap: 13px; padding: 8px 19px 8px 9px; color: #1e392f; background: #d7b668; border: 2px solid #d7b668; border-radius: 15px; box-shadow: 0 10px 26px #070d0b4a; font: inherit; font-weight: 800; cursor: pointer; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+      .locate-link:hover { background: #e3c77a; border-color: #e3c77a; box-shadow: 0 14px 30px #070d0b55; transform: translateY(-3px); }
+      .locate-icon { width: 40px; height: 40px; display: grid; place-items: center; color: #e3c77a; background: #24463a; border-radius: 12px; }
+      .locate-icon svg { width: 22px; height: 22px; }
+      .opening-hint { display: block; margin-top: 11px; color: #c9c4b3; font-size: 12px; }
+      .opening-art { position: relative; min-height: 340px; display: grid; place-items: center; animation: welcome-in .85s .12s both; }
+      .opening-map { position: relative; width: min(100%, 350px); min-height: 285px; overflow: hidden; background-color: #f5eedb; background-image: linear-gradient(34deg, transparent 46%, #b8c5a9 47%, #b8c5a9 49%, transparent 50%), linear-gradient(145deg, transparent 47%, #d8c79e 48%, #d8c79e 50%, transparent 51%), repeating-linear-gradient(45deg, transparent 0 18px, #b9974f10 18px 20px); background-size: 95px 82px, 115px 104px, 32px 32px; border: 9px solid #f7f0df; border-radius: 28px; box-shadow: 0 30px 65px #050d0a55, 0 4px 12px #050d0a30; transform: rotate(3deg); }
+      .opening-map-label { position: absolute; top: 16px; left: 16px; z-index: 1; padding: 7px 10px; color: #284638; background: #fff9e9ed; border: 1px solid #d7c89f; border-radius: 999px; font-size: 11px; font-weight: 800; }
+      .opening-route { position: absolute; inset: 18% 10%; width: 80%; height: 68%; overflow: visible; }
+      .opening-route path { stroke-dasharray: 4 11; animation: route-draw 2s ease-out both; }
+      .opening-pin { position: absolute; top: 43%; right: 23%; width: 52px; height: 52px; display: grid; place-items: center; color: white; background: #bd6942; border: 5px solid #fff9e9; border-radius: 50% 50% 50% 8px; box-shadow: 0 8px 18px #25282030; transform: rotate(-45deg); animation: pin-pulse 2.4s ease-in-out infinite; }
+      .opening-pin span { transform: rotate(45deg); font-size: 16px; }
+      .opening-footer { padding: 17px 0 22px; display: flex; justify-content: space-between; gap: 16px; color: #c9c4b3; border-top: 1px solid #d7b66845; font-size: 12px; }
+      .opening-footer strong { color: #e0c47a; }
+
+      .intro {
+        position: relative;
+        isolation: isolate;
+        min-height: 410px;
+        margin-bottom: 36px;
+        padding: clamp(28px, 6vw, 64px);
+        overflow: hidden;
+        color: #fffdf8;
+        background:
+          radial-gradient(ellipse at 68% 0%, #c4a45630, transparent 38%),
+          linear-gradient(118deg, #19372f 0%, #29483a 68%, #365646 100%);
+        border: 1px solid #d4b7686b;
+        border-radius: 24px;
+        box-shadow: 0 18px 42px #2528201c;
+      }
+      .intro::after {
+        position: absolute;
+        top: -180px;
+        right: 24%;
+        z-index: -1;
+        width: 420px;
+        height: 420px;
+        content: "";
+        background: linear-gradient(140deg, #e2c36d, #b86f3e);
+        border-radius: 50%;
+        opacity: .2;
+        transform: rotate(-18deg);
+      }
+      .hero-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, .82fr); gap: clamp(24px, 5vw, 56px); align-items: center; }
+      .hero-copy { max-width: 570px; }
+      .eyebrow {
+        display: inline-block;
+        margin-bottom: 14px;
+        padding: 6px 12px;
+        color: #fffdf8;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        background: #ffffff12;
+        border: 1px solid #ffffff38;
+        border-radius: 999px;
+      }
+      .intro h1 { max-width: 650px; margin: 0 0 12px; font-size: clamp(38px, 6vw, 64px); line-height: 1.04; letter-spacing: -.04em; }
+      .intro p { max-width: 570px; margin: 0 0 24px; color: #e7e9df; font-size: clamp(16px, 2vw, 19px); }
+      .hero-link { display: inline-flex; padding: 11px 17px; color: #fffdf8; font-weight: 700; background: var(--accent-color); border-radius: 10px; }
+      .welcome-art { position: relative; min-height: 290px; display: grid; place-items: center; }
+      .route-card { position: relative; width: min(100%, 350px); min-height: 260px; padding: 20px; overflow: hidden; color: var(--text-color); background: #fff8e8; border: 1px solid #d4b76880; border-radius: 22px; box-shadow: 0 22px 50px #101a1645; transform: rotate(2deg); }
+      .route-card::before { position: absolute; inset: 45px 24px 24px; content: ""; background-image: linear-gradient(30deg, transparent 48%, #d9e3d3 49%, #d9e3d3 51%, transparent 52%), linear-gradient(150deg, transparent 48%, #e8dfc7 49%, #e8dfc7 51%, transparent 52%), repeating-linear-gradient(45deg, transparent 0 15px, #b9974f10 15px 17px); background-size: 64px 56px, 72px 64px, 30px 30px; opacity: .8; }
+      .route-card-top, .route-label, .route-pin, .route-path { position: relative; z-index: 1; }
+      .route-card-top { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 800; }
+      .route-dot { width: 9px; height: 9px; display: inline-block; margin-right: 7px; background: var(--accent-color); border-radius: 50%; box-shadow: 0 0 0 5px #b86f3e24; }
+      .route-label { position: absolute; top: 72px; left: 24px; padding: 5px 9px; color: #49624b; background: #e9eee5; border-radius: 999px; font-size: 11px; font-weight: 700; }
+      .route-path { position: absolute; inset: 92px 20px 20px; width: calc(100% - 40px); height: calc(100% - 112px); overflow: visible; }
+      .route-pin { position: absolute; top: 142px; right: 68px; width: 34px; height: 34px; display: grid; place-items: center; color: white; background: var(--accent-color); border: 4px solid white; border-radius: 50% 50% 50% 0; box-shadow: 0 5px 14px #25282030; transform: rotate(-45deg); }
+      .route-pin span { transform: rotate(45deg); font-size: 12px; }
+      .route-footer { position: absolute; right: 20px; bottom: 18px; left: 20px; z-index: 1; display: flex; justify-content: space-between; color: var(--muted-color); font-size: 11px; }
+      .about-overview { display: grid; gap: 16px; }
+      .about-overview > p { margin: 0; color: var(--muted-color); }
+      .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+      .feature-card { padding: 14px; background: linear-gradient(145deg, var(--surface-color), #f5f2e9); border: 1px solid var(--border-color); border-radius: 12px; transition: transform .18s ease, box-shadow .18s ease; }
+      .feature-card h3 { margin: 0 0 5px; color: var(--primary-color); font-size: 15px; }
+      .feature-card p { margin: 0; color: var(--muted-color); font-size: 13px; }
+      .about-editor { margin-top: 8px; padding-top: 16px; border-top: 1px solid var(--border-color); }
+      .content-grid { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 24px; align-items: start; }
+      .component-list { min-width: 0; }
+      footer { padding: 24px; text-align: center; color: var(--muted-color); border-top: 1px solid var(--border-color); }
+    }
+
+    @layer components {
+      .skip-link { position: absolute; top: -50px; left: 12px; z-index: 20; padding: 8px; background: var(--surface-color); }
+      .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        min-height: 64px;
+        padding: 0 3%;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        background: #fffdf8ed;
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border-color);
+      }
+      .site-name { margin-right: auto; color: var(--primary-color); font-size: 19px; font-weight: 800; letter-spacing: -.04em; }
+      .site-name::before { content: "✦ "; color: var(--accent-color); }
+      .nav-links { display: flex; align-items: center; gap: 14px; }
+      .nav-links > a, .nav-dropdown > summary { padding: 10px 8px; color: var(--muted-color); border-radius: 8px; }
+      .nav-dropdown { position: relative; }
+      .nav-dropdown > summary::after { content: " ▾"; }
+      .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 5;
+        width: 210px;
+        padding: 8px;
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        box-shadow: 0 8px 20px #25282014;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(6px);
+        visibility: hidden;
+        transition: opacity .16s ease, transform .16s ease, visibility .16s ease;
+      }
+      .dropdown-menu ul { margin: 0; padding: 0; list-style: none; }
+      .dropdown-menu li > a, .dropdown-menu > a { display: block; padding: 10px; border-radius: 8px; }
+      .dropdown-menu .menu-group > h3 { margin: 6px 8px 3px; color: var(--primary-color); font-size: 12px; }
+      .dropdown-menu .menu-group > ul > li > a { padding: 7px 8px; }
+      .mega-menu { left: auto; right: -80px; width: min(600px, 90vw); padding: 20px; }
+      .mega-menu h2 { margin: 0 0 12px; color: var(--primary-color); font-size: 18px; }
+      .mega-menu > ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+      .mega-menu .menu-group > h3 { margin: 0 0 6px; color: var(--primary-color); font-size: 14px; }
+      .mega-menu .menu-group > ul > li > a { padding: 7px 8px; }
+      .breadcrumb-dropdown { position: relative; }
+      .breadcrumb-dropdown > summary { padding: 3px 8px; color: var(--primary-color); border: 1px solid var(--border-color); border-radius: 8px; }
+      .breadcrumb-dropdown > summary::after { content: " ▾"; }
+      .breadcrumb-menu { position: absolute; top: calc(100% + 6px); left: 0; z-index: 6; width: 190px; max-height: 260px; display: grid; gap: 2px; overflow-y: auto; padding: 7px; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 12px; box-shadow: 0 10px 24px #2528201c; opacity: 0; pointer-events: none; transform: translateY(5px); visibility: hidden; transition: opacity .16s ease, transform .16s ease, visibility .16s ease; }
+      .breadcrumb-menu a { padding: 8px 9px; color: var(--muted-color); border-radius: 7px; }
+      .breadcrumb-dropdown[open] > .breadcrumb-menu, .breadcrumb-dropdown:hover > .breadcrumb-menu, .breadcrumb-dropdown:focus-within > .breadcrumb-menu { opacity: 1; pointer-events: auto; transform: translateY(0); visibility: visible; }
+      .button { padding: 10px 16px; color: white; font-weight: 700; background: var(--primary-color); border-radius: 10px; }
+      .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+      .drawer-toggle, .menu-button, .mobile-drawer, .drawer-backdrop { display: none; }
+      .menu-button span { width: 20px; height: 2px; background: var(--text-color); }
+      .drawer-toggle:focus-visible + .menu-button { outline: 3px solid #e0b84f; outline-offset: 3px; }
+
+      .sidebar, .panel {
+        padding: 18px;
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        box-shadow: 0 6px 20px #25282008;
+      }
+      .sidebar h2 { margin: 0 0 10px; font-size: 14px; }
+      .sidebar a { display: block; padding: 8px; color: var(--muted-color); }
+      .panel { margin-bottom: 20px; }
+      .panel h2 { margin: 0 0 14px; padding-bottom: 10px; color: #29483a; border-bottom: 1px solid var(--border-color); font-size: 19px; }
+      .about-editor { display: grid; gap: 8px; }
+      .about-editor label { font-weight: 600; }
+      .about-editor textarea { width: 100%; min-height: 120px; padding: 12px; color: var(--text-color); font: inherit; border: 1px solid var(--border-color); resize: vertical; }
+      .about-editor textarea:focus { outline: 2px solid var(--primary-color); outline-offset: 2px; }
+      .about-editor p { margin: 0; color: var(--muted-color); font-size: 13px; }
+      .review-intro { margin: 0 0 16px; color: var(--muted-color); }
+      .review-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 18px; padding: 14px 16px; background: linear-gradient(110deg, #f8f0db, #fffaf0); border: 1px solid var(--border-color); border-radius: 12px; }
+      .review-average { color: var(--primary-color); font-size: 27px; font-weight: 850; line-height: 1; }
+      .review-stars { color: #b78332; letter-spacing: .12em; }
+      .review-count { color: var(--muted-color); font-size: 13px; }
+      .review-form { display: grid; gap: 12px; }
+      .emoji-rating { margin: 0; padding: 0; border: 0; }
+      .emoji-rating legend, .review-form label[for="review-text"] { margin-bottom: 8px; color: var(--text-color); font-weight: 700; }
+      .rating-options { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+      .rating-choice { position: relative; min-width: 0; display: grid; justify-items: center; gap: 6px; padding: 12px 6px; color: var(--muted-color); background: #fffdf8; border: 1px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: background .16s ease, border-color .16s ease, transform .16s ease; }
+      .rating-choice:hover { background: #f8f0db; transform: translateY(-2px); }
+      .rating-choice:has(input:checked) { color: var(--primary-color); background: #e9eee5; border-color: var(--primary-color); box-shadow: 0 0 0 2px #29483a18; }
+      .rating-choice input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+      .rating-choice input:focus-visible + .rating-emoji { outline: 3px solid #e0b84f; outline-offset: 3px; border-radius: 8px; }
+      .rating-emoji { font-size: 27px; line-height: 1.1; transition: transform .16s ease; }
+      .rating-choice:has(input:checked) .rating-emoji { transform: scale(1.2); }
+      .rating-label { font-size: 11px; font-weight: 650; text-align: center; }
+      .review-form textarea { width: 100%; min-height: 92px; padding: 12px; color: var(--text-color); font: inherit; border: 1px solid var(--border-color); border-radius: 10px; resize: vertical; }
+      .review-form textarea:focus { outline: 2px solid var(--primary-color); outline-offset: 2px; }
+      .review-hint, .review-status { margin: 0; color: var(--muted-color); font-size: 13px; }
+      .review-submit { justify-self: start; padding: 10px 16px; color: #fffaf0; background: var(--primary-color); border: 0; border-radius: 10px; font: inherit; font-weight: 750; cursor: pointer; transition: background .16s ease, transform .16s ease; }
+      .review-submit:hover { background: #19372f; transform: translateY(-1px); }
+      .review-list { display: grid; gap: 10px; margin-top: 20px; }
+      .review-card { padding: 14px 16px; background: linear-gradient(145deg, #fffdf8, #f8f0db); border: 1px solid var(--border-color); border-radius: 12px; }
+      .review-card header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+      .review-card h3, .review-card p { margin: 0; }
+      .review-card h3 { color: var(--primary-color); font-size: 15px; }
+      .review-card time { color: var(--muted-color); font-size: 12px; }
+      .review-card p { color: var(--text-color); white-space: pre-wrap; overflow-wrap: anywhere; }
+      .contact-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+      .contact-card { padding: 14px; background: linear-gradient(145deg, var(--surface-color), #f5f2e9); border: 1px solid var(--border-color); border-radius: 12px; }
+      .contact-card h3 { margin: 0 0 8px; font-size: 16px; }
+      .contact-card p, .contact-card address { margin: 4px 0; color: var(--muted-color); font-size: 14px; font-style: normal; }
+      .contact-card a { color: var(--primary-color); }
+      .link-directory { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+      .link-category { padding: 16px; background: linear-gradient(145deg, var(--surface-color), #f5f2e9); border: 1px solid var(--border-color); border-radius: 12px; }
+      .link-category h3 { margin: 0 0 10px; color: #354b37; font-size: 16px; }
+      .link-category ul { margin: 0; padding: 0; list-style: none; }
+      .link-category li + li { margin-top: 6px; }
+      .link-category a { color: var(--primary-color); font-weight: 600; }
+      .sample-navbar {
+        padding: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 16px;
+        border: 1px solid var(--border-color);
+      }
+      .sample-navbar > strong { margin-right: auto; }
+      .sample-navbar a, .sample-navbar summary { color: var(--muted-color); }
+      .sample-dropdown { position: relative; }
+      .sample-dropdown > summary::after { content: " ▾"; }
+      .sample-dropdown .dropdown-menu { top: 24px; }
+      .menu-visuals { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr)); gap: 14px; margin-top: 18px; }
+      .menu-visual-card { min-width: 0; padding: 14px; background: linear-gradient(145deg, #fffdf8, #f8f0db); border: 1px solid var(--border-color); border-radius: 14px; }
+      .menu-visual-heading { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+      .menu-visual-icon { width: 40px; height: 40px; display: grid; place-items: center; color: #fff9e9; background: var(--primary-color); border-radius: 12px; font-size: 19px; }
+      .menu-visual-heading h3, .menu-visual-heading p { margin: 0; }
+      .menu-visual-heading h3 { color: var(--primary-color); font-size: 15px; }
+      .menu-visual-heading p, .menu-visual-caption { color: var(--muted-color); font-size: 12px; }
+      .visual-browser { position: relative; padding: 8px; overflow: visible; background: #fffdf8; border: 1px solid #e6decb; border-radius: 12px; box-shadow: 0 7px 18px #2528200c; }
+      .visual-browser-chrome { height: 22px; display: flex; align-items: center; gap: 4px; padding: 0 2px 6px; color: #77786f; font-size: 9px; }
+      .visual-browser-chrome span:nth-child(4) { margin: 0 auto; padding: 2px 14px; background: #f3efe4; border-radius: 999px; }
+      .visual-browser-chrome i { width: 6px; height: 6px; background: #d28d69; border-radius: 50%; }
+      .visual-browser-chrome i:nth-child(2) { background: #e0bd68; }
+      .visual-browser-chrome i:nth-child(3) { background: #829577; }
+      .visual-browser-nav { position: relative; min-height: 34px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 5px 7px; color: #58675d; border-bottom: 1px solid #eee8db; font-size: 10px; }
+      .visual-browser-nav > strong { margin-right: auto; color: var(--primary-color); font-size: 10px; letter-spacing: .06em; }
+      .visual-browser-nav a, .visual-browser-nav summary { padding: 3px 4px; }
+      .visual-browser-nav details { position: relative; }
+      .visual-browser-nav summary::after { content: "⌄"; margin-left: 3px; }
+      .visual-dropdown-menu { position: absolute; top: calc(100% + 5px); left: 0; z-index: 4; width: 190px; display: grid; gap: 3px; padding: 7px; background: #fffaf0; border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 10px 24px #25282024; opacity: 0; pointer-events: none; transform: translateY(6px) scale(.98); transform-origin: top left; visibility: hidden; transition: opacity .2s ease, transform .2s ease, visibility .2s ease; }
+      .visual-dropdown-menu a { display: flex; justify-content: space-between; padding: 7px; border-radius: 6px; }
+      .visual-browser-nav details[open] > .visual-dropdown-menu, .visual-browser-nav details:hover > .visual-dropdown-menu, .visual-browser-nav details:focus-within > .visual-dropdown-menu { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); visibility: visible; }
+      .visual-stage { min-height: 138px; display: grid; grid-template-columns: 1.15fr .85fr; align-items: center; gap: 8px; padding: 14px 8px 6px; background: radial-gradient(ellipse at 86% 18%, #d7b66830, transparent 48%), linear-gradient(130deg, #f8f4e9, #fffdf8); }
+      .visual-stage p, .visual-stage h4 { margin: 0; }
+      .visual-kicker { color: var(--accent-color); font-size: 8px; font-weight: 850; letter-spacing: .1em; }
+      .visual-stage h4 { margin: 5px 0; color: var(--primary-color); font-size: clamp(14px, 2vw, 19px); line-height: 1.15; }
+      .visual-stage-copy { color: var(--muted-color); font-size: 9px; }
+      .mini-route-art { width: 100%; overflow: visible; }
+      .mini-route-art .map-path { stroke-dasharray: 4 7; animation: menu-route 3s linear infinite; }
+      .mini-route-art .map-destination { transform-box: fill-box; transform-origin: center; animation: menu-destination 2.4s ease-in-out infinite; }
+      .visual-mega-menu { position: static !important; }
+      .visual-mega-panel { position: absolute; top: calc(100% + 5px); right: 0; left: 0; z-index: 5; display: grid; grid-template-columns: 1fr 1.1fr; gap: 12px; padding: 12px; color: var(--text-color); background: #fffaf0; border: 1px solid var(--border-color); border-radius: 12px; box-shadow: 0 12px 28px #25282024; opacity: 0; pointer-events: none; transform: translateY(7px) scale(.985); transform-origin: top center; visibility: hidden; transition: opacity .2s ease, transform .2s ease, visibility .2s ease; }
+      .visual-browser-nav .visual-mega-menu[open] > .visual-mega-panel, .visual-browser-nav .visual-mega-menu:hover > .visual-mega-panel, .visual-browser-nav .visual-mega-menu:focus-within > .visual-mega-panel { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); visibility: visible; }
+      .visual-mega-links h4, .visual-mega-feature h4 { margin: 0 0 7px; color: var(--primary-color); font-size: 11px; }
+      .visual-mega-links a { display: block; padding: 5px 3px; color: var(--muted-color); border-radius: 5px; font-size: 9px; }
+      .visual-mega-feature { padding: 8px; background: linear-gradient(145deg, #e9eee5, #f8f0db); border-radius: 9px; }
+      .visual-feature-art { height: 60px; display: grid; place-items: center; overflow: hidden; background: radial-gradient(circle at 30% 20%, #f8dfa0, transparent 24%), linear-gradient(125deg, #29483a, #54715c 55%, #c17a4b); border-radius: 7px; }
+      .visual-feature-art svg { width: 88%; height: 100%; }
+      .visual-feature-label { margin: 6px 0 2px; color: var(--accent-color); font-size: 7px; font-weight: 850; letter-spacing: .09em; }
+      .visual-mega-feature h4 { margin-bottom: 2px; }
+      .visual-mega-feature p { margin: 0; color: var(--muted-color); font-size: 8px; }
+      .menu-visual-caption { margin: 10px 2px 0; line-height: 1.45; }
+
+      .tabs { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; padding: 0; border: 0; }
+      .tabs input { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+      .tabs label { padding: 9px 14px; cursor: pointer; color: var(--muted-color); }
+      .tab-content { display: none; width: 100%; padding: 14px 4px 4px; }
+      .tab-content h3 { margin: 0 0 5px; color: var(--primary-color); font-size: 16px; }
+      .tab-content > p { margin: 0; color: var(--muted-color); }
+      .tab-detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 9px; margin-top: 12px; }
+      .tab-detail { padding: 11px; background: linear-gradient(145deg, #fffdf8, #f8f0db); border: 1px solid var(--border-color); border-radius: 10px; }
+      .tab-detail strong { display: block; color: var(--primary-color); font-size: 13px; }
+      .tab-detail span { display: block; margin-bottom: 4px; color: var(--accent-color); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+      .tab-detail p { margin: 3px 0 0; color: var(--muted-color); font-size: 12px; }
+      .activity-list { display: grid; gap: 10px; margin: 12px 0 0; padding: 0; list-style: none; }
+      .activity-list li { display: flex; align-items: flex-start; gap: 10px; }
+      .activity-marker { width: 28px; height: 28px; flex: 0 0 28px; display: grid; place-items: center; color: var(--primary-color); background: #e9eee5; border-radius: 9px; font-size: 11px; font-weight: 800; }
+      .activity-list strong { color: var(--primary-color); font-size: 13px; }
+      .activity-list p { margin: 1px 0 0; color: var(--muted-color); font-size: 12px; }
+      .breadcrumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; color: var(--muted-color); }
+      .breadcrumb-trail { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; padding: 0; list-style: none; }
+      .breadcrumb-trail li + li::before { content: "›"; margin-right: 8px; color: var(--accent-color); font-weight: 800; }
+      .breadcrumb-trail a { color: var(--primary-color); }
+      .breadcrumb-jump { position: relative; }
+      .breadcrumbs [aria-current="page"] { color: var(--text-color); font-weight: 700; }
+      pre { max-width: 100%; overflow-x: auto; padding: 14px; color: #f4f1e8; background: #292c27; border-radius: 12px; font-size: 13px; }
+    }
+
+    @layer states {
+      .skip-link:focus { top: 8px; }
+      :where(a, button, input, summary):focus-visible { outline: 3px solid #e0b84f; outline-offset: 3px; }
+      .nav-links > a, .mobile-drawer > a { border-bottom: 2px solid transparent; }
+      .nav-links > a[aria-current="page"],
+      .mobile-drawer > a[aria-current="page"] {
+        color: var(--primary-color);
+        background: var(--hover-color);
+        border-color: var(--primary-color);
+      }
+      .nav-dropdown > summary[aria-current="page"] {
+        color: var(--primary-color);
+      }
+      .dropdown-menu a[aria-current="page"],
+      .sidebar a[aria-current="page"] { color: var(--primary-color); background: var(--hover-color); }
+      .nav-links a:hover, .nav-dropdown > summary:hover,
+      .sample-navbar a:hover, .sample-navbar summary:hover { color: var(--primary-color); }
+      .hero-link { transition: transform .18s ease, background .18s ease; }
+      .hero-link:hover { color: #fffdf8; background: #a95225; transform: translateY(-2px); }
+      .feature-card:hover { box-shadow: 0 12px 24px #25282012; transform: translateY(-3px); }
+      .intro { animation: welcome-in .65s ease-out both; }
+      .hero-copy > * { animation: welcome-in .55s ease-out both; }
+      .hero-copy > :nth-child(1) { animation-delay: .08s; }
+      .hero-copy > :nth-child(2) { animation-delay: .16s; }
+      .hero-copy > :nth-child(3) { animation-delay: .24s; }
+      .hero-copy > :nth-child(4) { animation-delay: .32s; }
+      .route-card { animation: card-float 5s ease-in-out infinite; }
+      .route-pin { animation: pin-pulse 2.4s ease-in-out infinite; }
+      .panel { animation: panel-arrive .55s ease-out both; }
+      .visual-browser-nav details[open] > .visual-dropdown-menu a,
+      .visual-browser-nav details:hover > .visual-dropdown-menu a,
+      .visual-browser-nav details:focus-within > .visual-dropdown-menu a,
+      .visual-browser-nav .visual-mega-menu[open] .visual-mega-links a,
+      .visual-browser-nav .visual-mega-menu:hover .visual-mega-links a,
+      .visual-browser-nav .visual-mega-menu:focus-within .visual-mega-links a { animation: menu-item-arrive .32s ease-out both; }
+      .visual-dropdown-menu a:nth-child(2), .visual-mega-links a:nth-of-type(3) { animation-delay: .04s; }
+      .visual-dropdown-menu a:nth-child(3), .visual-mega-links a:nth-of-type(4) { animation-delay: .08s; }
+      .visual-dropdown-menu a:nth-child(4) { animation-delay: .12s; }
+      .component-list > .panel:nth-child(2) { animation-delay: .06s; }
+      .component-list > .panel:nth-child(3) { animation-delay: .12s; }
+      .component-list > .panel:nth-child(4) { animation-delay: .18s; }
+      .component-list > .panel:nth-child(5) { animation-delay: .24s; }
+      .component-list > .panel:nth-child(6) { animation-delay: .3s; }
+      .component-list > .panel:nth-child(7) { animation-delay: .36s; }
+      @keyframes welcome-in {
+        from { opacity: 0; translate: 0 14px; }
+        to { opacity: 1; translate: 0 0; }
+      }
+      @keyframes panel-arrive {
+        from { opacity: 0; translate: 0 10px; }
+        to { opacity: 1; translate: 0 0; }
+      }
+      @keyframes card-float {
+        0%, 100% { translate: 0 0; }
+        50% { translate: 0 -7px; }
+      }
+      @keyframes pin-pulse {
+        0%, 100% { box-shadow: 0 5px 14px #25282030; }
+        50% { box-shadow: 0 7px 22px #2528204a, 0 0 0 8px #c5693033; }
+      }
+      @keyframes menu-item-arrive {
+        from { opacity: 0; translate: 0 5px; }
+        to { opacity: 1; translate: 0 0; }
+      }
+      @keyframes menu-route { to { stroke-dashoffset: -44; } }
+      @keyframes menu-destination {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.16); }
+      }
+      .dropdown-menu a:hover, .sidebar a:hover, .tabs label:hover { background: var(--hover-color); border-radius: 8px; }
+      .sidebar a:hover { color: var(--primary-color); }
+      .breadcrumbs a:hover, .breadcrumb-menu a:hover { color: var(--primary-color); text-decoration: underline; }
+      .link-category a:hover { color: var(--accent-color); text-decoration: underline; }
+      .button:hover { color: white; background: #344c38; }
+      .nav-dropdown[open] > .dropdown-menu,
+      .nav-dropdown:hover > .dropdown-menu,
+      .nav-dropdown:focus-within > .dropdown-menu,
+      .sample-dropdown[open] > .dropdown-menu,
+      .sample-dropdown:hover > .dropdown-menu,
+      .sample-dropdown:focus-within > .dropdown-menu {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+        visibility: visible;
+      }
+      #tab-overview:checked ~ .tab-labels label[for="tab-overview"],
+      #tab-activity:checked ~ .tab-labels label[for="tab-activity"],
+      #tab-settings:checked ~ .tab-labels label[for="tab-settings"] {
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--primary-color);
+      }
+      #tab-overview:checked ~ .tab-content.tab-overview,
+      #tab-activity:checked ~ .tab-content.tab-activity,
+      #tab-settings:checked ~ .tab-content.tab-settings { display: block; }
+      #tab-overview:focus-visible ~ .tab-labels label[for="tab-overview"],
+      #tab-activity:focus-visible ~ .tab-labels label[for="tab-activity"],
+      #tab-settings:focus-visible ~ .tab-labels label[for="tab-settings"] { outline: 2px solid var(--primary-color); outline-offset: 2px; }
+    }
+
+    @layer responsive {
+      @media (max-width: 680px) {
+        main { width: min(100% - 32px, 560px); padding: 32px 0; }
+        .opening-topbar { min-height: 66px; }
+        .opening-layout { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 28px 0 32px; }
+        .opening-copy { text-align: center; }
+        .opening-copy p { margin-right: auto; margin-left: auto; }
+        .opening-art { min-height: 260px; }
+        .opening-map { width: min(82vw, 330px); min-height: 250px; }
+        .opening-footer { flex-wrap: wrap; }
+        .intro { min-height: 0; padding: 32px 24px; border-radius: 22px; }
+        .intro::after { top: -170px; right: -180px; }
+        .hero-layout { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+        .welcome-art { min-height: 250px; }
+        .route-card { min-height: 230px; transform: none; }
+        .navbar { min-height: 60px; padding: 0 18px; justify-content: space-between; }
+        .site-name { margin: 0; }
+        .nav-links, .navbar > .button { display: none; }
+        .drawer-toggle {
+          position: absolute;
+          display: block;
+          width: 1px;
+          height: 1px;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          opacity: 0;
+        }
+        .menu-button {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 5px;
+          cursor: pointer;
+        }
+        .drawer-backdrop {
+          position: fixed;
+          inset: 60px 0 0;
+          z-index: 8;
+          display: block;
+          background: #0006;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity .2s ease, visibility 0s linear .2s;
+        }
+        .mobile-drawer {
+          position: fixed;
+          top: 60px;
+          right: 0;
+          bottom: 0;
+          z-index: 9;
+          width: min(320px, 88vw);
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          overflow-y: auto;
+          background: var(--surface-color);
+          clip-path: inset(0 0 0 100%);
+          visibility: hidden;
+          overscroll-behavior: contain;
+          transition: clip-path .2s ease, visibility 0s linear .2s;
+        }
+        .drawer-toggle:checked ~ .drawer-backdrop {
+          opacity: 1;
+          visibility: visible;
+          transition-delay: 0s;
+        }
+        .drawer-toggle:checked ~ .mobile-drawer {
+          clip-path: inset(0);
+          visibility: visible;
+          transition-delay: 0s;
+        }
+        .mobile-drawer > a, .mobile-drawer summary { padding: 12px 4px; border-bottom: 1px solid var(--border-color); }
+        .mobile-drawer .dropdown-menu { position: static; width: auto; padding: 0 0 0 14px; border: 0; border-radius: 0; box-shadow: none; transform: none; }
+        .mobile-drawer .mega-menu > ul { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+        .mobile-drawer details[open] > .dropdown-menu,
+        .mobile-drawer details:hover > .dropdown-menu,
+        .mobile-drawer details:focus-within > .dropdown-menu {
+          opacity: 1;
+          pointer-events: auto;
+          visibility: visible;
+        }
+        .content-grid { grid-template-columns: minmax(0, 1fr); }
+        .component-list { min-width: 0; }
+        .sidebar { display: flex; flex-wrap: wrap; gap: 4px; }
+        .sidebar h2 { width: 100%; }
+        .sample-navbar { gap: 12px; }
+      }
+
+      @media (min-width: 681px) and (max-width: 820px) {
+        .navbar { gap: 8px; padding: 0 12px; }
+        .nav-links { gap: 2px; }
+        .nav-links > a, .nav-dropdown > summary { padding: 8px 4px; font-size: 14px; }
+        .button { padding: 8px 10px; font-size: 14px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: .01ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+          transition-duration: .01ms !important;
+          transition-delay: 0ms !important;
+        }
+      }
+    }
+  </style>
+</head>
+<body data-navigation-api="/api/navigation">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <section class="opening-page" aria-labelledby="opening-title">
+    <header class="opening-topbar">
+      <a class="opening-brand" href="#opening-title" aria-label="Wayfinder welcome">
+        <span class="opening-mark" aria-hidden="true">✦</span>
+        <span>Wayfinder</span>
+      </a>
+      <span class="opening-note">A brighter way to find your way</span>
+    </header>
+    <div class="opening-layout">
+      <div class="opening-copy">
+        <span class="opening-eyebrow">✦ Your web journey starts here</span>
+        <h1 id="opening-title">Find your next way.</h1>
+        <p>Welcome to Wayfinder—a friendly launch point for websites, useful pages, and places worth exploring.</p>
+        <button class="locate-link" type="button" aria-controls="site-home">
+          <span class="locate-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </span>
+          <span>Open the full site <span aria-hidden="true">→</span></span>
+        </button>
+        <span class="opening-hint">Follow the location pin to explore the whole website.</span>
+      </div>
+      <div class="opening-art" role="img" aria-label="Decorative map illustration with a dotted route and location pin">
+        <div class="opening-map" aria-hidden="true">
+          <span class="opening-map-label">A new path is waiting</span>
+          <svg class="opening-route" viewBox="0 0 300 260" fill="none" aria-hidden="true">
+            <path d="M20 214C74 214 48 151 110 158C158 163 140 207 190 185C240 163 202 86 274 64" stroke="#49624b" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="20" cy="214" r="8" fill="#e8c66c" stroke="white" stroke-width="4"/>
+          </svg>
+          <span class="opening-pin"><span>✦</span></span>
+        </div>
+      </div>
+    </div>
+    <footer class="opening-footer">
+      <span><strong>Wayfinder</strong> · Follow your curiosity.</span>
+      <span>Designed to guide, built to explore.</span>
+    </footer>
+  </section>
+  <header class="navbar" id="site-home" tabindex="-1">
+    <a class="site-name" href="#main">Wayfinder</a>
+    <input class="drawer-toggle" type="checkbox" id="drawer-toggle" aria-label="Toggle navigation menu" aria-controls="mobile-nav">
+    <label class="menu-button" for="drawer-toggle" aria-label="Open navigation menu"><span></span><span></span><span></span></label>
+
+    <nav class="nav-links" id="primary-nav" aria-label="Main navigation">
+      <a href="#main">Home</a>
+      <details class="nav-dropdown">
+        <summary>Products</summary>
+        <div class="dropdown-menu">
+          <ul>
+            <li class="menu-group">
+              <h3>Navigation</h3>
+              <ul>
+                <li><a href="#menus">Menus</a></li>
+                <li><a href="#tabs">Tabs</a></li>
+                <li><a href="#breadcrumbs">Breadcrumbs</a></li>
+              </ul>
+            </li>
+            <li class="menu-group">
+              <h3>Site pages</h3>
+              <ul>
+                <li><a href="#websites">Websites</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+                <li><a href="#schema">Menu schema</a></li>
+                <li><a href="#contacts">Contacts</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </details>
+      <details class="nav-dropdown">
+        <summary>More</summary>
+        <div class="dropdown-menu mega-menu">
+          <h2>Explore every section</h2>
+          <ul>
+            <li class="menu-group">
+              <h3>Components</h3>
+              <ul>
+                <li><a href="#menus">Dropdown and mega menu</a></li>
+                <li><a href="#tabs">Tabs</a></li>
+                <li><a href="#breadcrumbs">Breadcrumbs</a></li>
+                <li><a href="#schema">Menu schema</a></li>
+              </ul>
+            </li>
+            <li class="menu-group">
+              <h3>Website directory</h3>
+              <ul>
+                <li><a href="#websites">All websites</a></li>
+                <li><a href="#reference-links">Reference &amp; video</a></li>
+                <li><a href="#shopping-links">Shopping</a></li>
+                <li><a href="#browser-links">Browsers</a></li>
+                <li><a href="#ai-links">AI tools</a></li>
+              </ul>
+            </li>
+            <li class="menu-group">
+              <h3>About Wayfinder</h3>
+              <ul>
+                <li><a href="#about">Features and About</a></li>
+                <li><a href="#reviews">Reviews and ratings</a></li>
+                <li><a href="#contacts">Contacts</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </details>
+      <a href="#websites">Websites</a>
+      <a href="#contacts">Contact</a>
+    </nav>
+    <a class="button" href="#menus">Get started</a>
+
+    <label class="drawer-backdrop" for="drawer-toggle" aria-label="Close navigation menu"></label>
+    <nav class="mobile-drawer" id="mobile-nav" aria-label="Mobile navigation">
+      <a href="#main">Home</a>
+      <details class="nav-dropdown">
+        <summary>Products</summary>
+        <div class="dropdown-menu">
+          <ul>
+            <li class="menu-group">
+              <h3>Navigation</h3>
+              <ul>
+                <li><a href="#menus">Menus</a></li>
+                <li><a href="#tabs">Tabs</a></li>
+                <li><a href="#breadcrumbs">Breadcrumbs</a></li>
+              </ul>
+            </li>
+            <li class="menu-group">
+              <h3>Site pages</h3>
+              <ul>
+                <li><a href="#websites">Websites</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+                <li><a href="#schema">Menu schema</a></li>
+                <li><a href="#contacts">Contacts</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </details>
+      <details class="nav-dropdown">
+        <summary>More</summary>
+        <div class="dropdown-menu mega-menu">
+          <h2>Explore every section</h2>
+          <ul>
+            <li class="menu-group">
+              <h3>Components</h3>
+              <ul>
+                <li><a href="#menus">Dropdown and mega menu</a></li>
+                <li><a href="#tabs">Tabs</a></li>
+                <li><a href="#breadcrumbs">Breadcrumbs</a></li>
+                <li><a href="#schema">Menu schema</a></li>
+              </ul>
+            </li>
+            <li class="menu-group">
+              <h3>Website directory</h3>
+              <ul>
+                <li><a href="#websites">All websites</a></li>
+                <li><a href="#reference-links">Reference &amp; video</a></li>
+                <li><a href="#shopping-links">Shopping</a></li>
+                <li><a href="#browser-links">Browsers</a></li>
+                <li><a href="#ai-links">AI tools</a></li>
+              </ul>
+            </li>
+            <li class="menu-group">
+              <h3>About Wayfinder</h3>
+              <ul>
+                <li><a href="#about">Features and About</a></li>
+                <li><a href="#reviews">Reviews and ratings</a></li>
+                <li><a href="#contacts">Contacts</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </details>
+      <a href="#websites">Websites</a>
+      <a href="#contacts">Contact</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="intro" aria-labelledby="page-title">
+      <div class="hero-layout">
+        <div class="hero-copy">
+          <span class="eyebrow">Welcome to Wayfinder</span>
+          <h1 id="page-title">Your next destination is just a click away.</h1>
+          <p>One friendly starting point for exploring useful websites, finding page sections, and getting where you want to go.</p>
+          <a class="hero-link" href="#websites">Explore websites <span aria-hidden="true">&nbsp;→</span></a>
+        </div>
+        <div class="welcome-art" role="img" aria-label="Illustration of a map with a dotted route leading to a destination pin">
+          <div class="route-card" aria-hidden="true">
+            <div class="route-card-top"><span><span class="route-dot"></span>Your next stop</span><span>✦</span></div>
+            <span class="route-label">A little direction goes a long way</span>
+            <svg class="route-path" viewBox="0 0 300 160" fill="none" aria-hidden="true">
+              <path d="M22 124C65 124 54 74 105 82C150 89 139 126 186 112C220 102 218 51 264 50" stroke="#49624b" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12"/>
+              <circle cx="23" cy="124" r="9" fill="#e8c66c" stroke="white" stroke-width="4"/>
+            </svg>
+            <span class="route-pin"><span>✦</span></span>
+            <div class="route-footer"><span>Explore</span><span>Discover</span><span>Arrive</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="content-grid">
+      <aside class="sidebar" aria-label="Component navigation">
+        <h2>Sections</h2>
+        <nav class="sidebar-links" id="sidebar-links" aria-label="Component sections">
+          <a href="#menus">Menus</a><a href="#tabs">Tabs</a>
+          <a href="#breadcrumbs">Breadcrumbs</a><a href="#schema">Data</a>
+          <a href="#websites">Websites</a><a href="#reviews">Reviews</a>
+          <a href="#contacts">Contacts</a>
+        </nav>
+      </aside>
+
+      <article class="component-list" aria-label="Navigation components">
+        <section class="panel" id="menus" aria-labelledby="menus-title">
+          <h2 id="menus-title">Dropdown and mega menu</h2>
+          <nav class="sample-navbar" aria-label="Example navigation">
+            <strong>Example site</strong><a href="#main">Home</a>
+            <details class="sample-dropdown">
+              <summary>Services</summary>
+              <div class="dropdown-menu"><a href="#menus">Consulting</a><a href="#menus">Design</a><a href="#menus">Support</a></div>
+            </details>
+            <a href="#breadcrumbs">About</a>
+          </nav>
+          <p>A dropdown keeps a short list close to its label. A mega menu opens a wider, grouped panel for a larger site. Explore both visual examples with hover, keyboard focus, or click.</p>
+          <div class="menu-visuals">
+            <article class="menu-visual-card" aria-labelledby="dropdown-visual-title">
+              <div class="menu-visual-heading">
+                <span class="menu-visual-icon" aria-hidden="true">⌄</span>
+                <div><h3 id="dropdown-visual-title">Dropdown menu</h3><p>Quick links, kept simple</p></div>
+              </div>
+              <div class="visual-browser">
+                <div class="visual-browser-chrome" aria-hidden="true"><i></i><i></i><i></i><span>wayfinder.studio</span><span>✦</span></div>
+                <nav class="visual-browser-nav" aria-label="Dropdown menu preview">
+                  <strong>WANDER</strong>
+                  <a href="#main">Home</a>
+                  <details>
+                    <summary>Explore</summary>
+                    <div class="visual-dropdown-menu">
+                      <a href="#websites">Places to explore <span>↗</span></a>
+                      <a href="#reference-links">Ideas and guides <span>↗</span></a>
+                      <a href="#about">Our story <span>↗</span></a>
+                    </div>
+                  </details>
+                  <a href="#contacts">Visit</a>
+                </nav>
+                <div class="visual-stage">
+                  <div>
+                    <p class="visual-kicker">QUICK ROUTES</p>
+                    <h4>Pick a direction.</h4>
+                    <p class="visual-stage-copy">A tidy menu makes the next step easy to find.</p>
+                  </div>
+                  <svg class="mini-route-art" viewBox="0 0 120 110" role="img" aria-label="Illustrated dotted route leading to a destination pin">
+                    <path d="M12 82C35 82 27 35 58 48S79 82 105 27" fill="none" stroke="#718568" stroke-width="4" stroke-linecap="round" class="map-path"/>
+                    <circle cx="12" cy="82" r="7" fill="#d7b668" stroke="#fffaf0" stroke-width="3"/>
+                    <g class="map-destination"><path d="M105 15c-8 0-14 6-14 14 0 10 14 26 14 26s14-16 14-26c0-8-6-14-14-14Z" fill="#b86f3e"/><circle cx="105" cy="29" r="4" fill="#fffaf0"/></g>
+                  </svg>
+                </div>
+              </div>
+              <p class="menu-visual-caption">Best for a small, focused set of choices such as Services, Account, or Help.</p>
+            </article>
+
+            <article class="menu-visual-card" aria-labelledby="mega-visual-title">
+              <div class="menu-visual-heading">
+                <span class="menu-visual-icon" aria-hidden="true">✦</span>
+                <div><h3 id="mega-visual-title">Mega menu</h3><p>Room for a richer journey</p></div>
+              </div>
+              <div class="visual-browser">
+                <div class="visual-browser-chrome" aria-hidden="true"><i></i><i></i><i></i><span>wayfinder.studio</span><span>✦</span></div>
+                <nav class="visual-browser-nav" aria-label="Mega menu preview">
+                  <strong>WANDER</strong>
+                  <a href="#main">Home</a>
+                  <details class="visual-mega-menu">
+                    <summary>Discover</summary>
+                    <div class="visual-mega-panel">
+                      <div class="visual-mega-links">
+                        <h4>Explore by interest</h4>
+                        <a href="#reference-links">Learning and ideas</a>
+                        <a href="#shopping-links">Find something special</a>
+                        <a href="#browser-links">Tools for the journey</a>
+                        <a href="#ai-links">Create and discover</a>
+                      </div>
+                      <a class="visual-mega-feature" href="#websites" aria-label="Featured destination: Your next great find">
+                        <div class="visual-feature-art" aria-hidden="true">
+                          <svg viewBox="0 0 180 80" fill="none">
+                            <path d="M0 64c26-20 47-17 68-4s37 7 55-16 38-17 57-3v39H0Z" fill="#d8c895"/>
+                            <path d="M0 70c30-13 47 7 74-4s42-25 61-12 30 15 45 4v15H0Z" fill="#829577"/>
+                            <path d="M48 53c24 0 24-31 50-31s20 28 50 28" stroke="#fff4d3" stroke-width="3" stroke-linecap="round" stroke-dasharray="3 7"/>
+                            <path d="M148 17c-7 0-12 5-12 12 0 9 12 21 12 21s12-12 12-21c0-7-5-12-12-12Z" fill="#b86f3e"/>
+                            <circle cx="148" cy="29" r="3.5" fill="#fffaf0"/>
+                            <path d="m31 16 3 6 6 1-5 4 1 6-5-3-5 3 1-6-5-4 6-1 3-6Z" fill="#f3d982"/>
+                          </svg>
+                        </div>
+                        <p class="visual-feature-label">FEATURED DESTINATION</p>
+                        <h4>Your next great find</h4>
+                        <p>A little inspiration for wherever you’re headed.</p>
+                      </a>
+                    </div>
+                  </details>
+                  <a href="#contacts">Visit</a>
+                </nav>
+                <div class="visual-stage">
+                  <div>
+                    <p class="visual-kicker">MORE TO DISCOVER</p>
+                    <h4>All your paths, together.</h4>
+                    <p class="visual-stage-copy">Clear groups and a featured story help visitors browse.</p>
+                  </div>
+                  <svg class="mini-route-art" viewBox="0 0 120 110" role="img" aria-label="Decorative map illustration with winding route">
+                    <path d="M11 89c28 0 10-42 40-42s17 30 40 14 13-38 27-38" fill="none" stroke="#718568" stroke-width="4" stroke-linecap="round" class="map-path"/>
+                    <circle cx="11" cy="89" r="7" fill="#d7b668" stroke="#fffaf0" stroke-width="3"/>
+                    <circle cx="118" cy="23" r="11" fill="#b86f3e" stroke="#fffaf0" stroke-width="4" class="map-destination"/>
+                  </svg>
+                </div>
+              </div>
+              <p class="menu-visual-caption">Best for many categories, helpful sub-links, and a featured destination—all in one glance.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="tabs" aria-labelledby="tabs-title">
+          <h2 id="tabs-title">Tabs</h2>
+          <fieldset class="tabs">
+            <legend class="visually-hidden">Example views</legend>
+            <input type="radio" name="tabs" id="tab-overview" aria-controls="tab-overview-panel" checked>
+            <input type="radio" name="tabs" id="tab-activity" aria-controls="tab-activity-panel">
+            <input type="radio" name="tabs" id="tab-settings" aria-controls="tab-settings-panel">
+            <div class="tab-labels">
+              <label for="tab-overview">Overview</label>
+              <label for="tab-activity">Activity</label>
+              <label for="tab-settings">Settings</label>
+            </div>
+            <section class="tab-content tab-overview" id="tab-overview-panel" aria-labelledby="tab-overview">
+              <h3>One place to find your way</h3>
+              <p>Wayfinder brings clear page navigation and useful web destinations together in a welcoming, responsive layout.</p>
+              <div class="tab-detail-grid">
+                <article class="tab-detail"><span>01 · Navigate</span><strong>Find a section</strong><p>Use breadcrumbs, dropdowns, and the mega menu to move around.</p></article>
+                <article class="tab-detail"><span>02 · Explore</span><strong>Discover websites</strong><p>Browse a curated directory of useful online destinations.</p></article>
+                <article class="tab-detail"><span>03 · Share</span><strong>Leave a review</strong><p>Choose an emoji rating and save feedback in this browser.</p></article>
+              </div>
+            </section>
+            <section class="tab-content tab-activity" id="tab-activity-panel" aria-labelledby="tab-activity">
+              <h3>Take a quick tour</h3>
+              <p>Here are a few ways to get started with the site.</p>
+              <ol class="activity-list">
+                <li><span class="activity-marker" aria-hidden="true">1</span><div><strong>Open the navigation</strong><p>Choose a category from Products or explore the multi-column More menu.</p></div></li>
+                <li><span class="activity-marker" aria-hidden="true">2</span><div><strong>Follow a breadcrumb</strong><p>Use the linked parent levels to jump back through the page structure.</p></div></li>
+                <li><span class="activity-marker" aria-hidden="true">3</span><div><strong>Rate your visit</strong><p>Head to Reviews and pick the emoji that matches your experience.</p></div></li>
+              </ol>
+            </section>
+            <section class="tab-content tab-settings" id="tab-settings-panel" aria-labelledby="tab-settings">
+              <h3>Current site preferences</h3>
+              <p>Wayfinder keeps these defaults simple and accessible.</p>
+              <div class="tab-detail-grid">
+                <article class="tab-detail"><span>Appearance</span><strong>Forest, ivory, and gold</strong><p>A warm palette with clear contrast and gentle accents.</p></article>
+                <article class="tab-detail"><span>Motion</span><strong>Reduced-motion aware</strong><p>Animations adapt to your device’s accessibility preference.</p></article>
+                <article class="tab-detail"><span>Privacy</span><strong>Local reviews</strong><p>Ratings and review notes stay in this browser.</p></article>
+              </div>
+            </section>
+          </fieldset>
+        </section>
+
+        <section class="panel" id="breadcrumbs" aria-labelledby="breadcrumb-title">
+          <h2 id="breadcrumb-title">Breadcrumbs</h2>
+          <nav class="breadcrumbs" aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <ol class="breadcrumb-trail">
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a itemprop="item" href="#main"><span itemprop="name">Home</span></a>
+                <meta itemprop="position" content="1">
+              </li>
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a itemprop="item" href="#menus"><span itemprop="name">Components</span></a>
+                <meta itemprop="position" content="2">
+              </li>
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <span itemprop="name" aria-current="page">Breadcrumbs</span>
+                <meta itemprop="position" content="3">
+              </li>
+            </ol>
+            <details class="breadcrumb-dropdown breadcrumb-jump">
+              <summary>Jump to section</summary>
+              <div class="breadcrumb-menu">
+                <a href="#menus">Menus</a>
+                <a href="#tabs">Tabs</a>
+                <a href="#breadcrumbs" aria-current="page">Breadcrumbs</a>
+                <a href="#websites">Websites</a>
+                <a href="#reference-links">Reference &amp; video</a>
+                <a href="#shopping-links">Shopping</a>
+                <a href="#browser-links">Browsers</a>
+                <a href="#ai-links">AI tools</a>
+                <a href="#about">About</a>
+                <a href="#reviews">Reviews</a>
+                <a href="#schema">Menu schema</a>
+                <a href="#contacts">Contacts</a>
+              </div>
+            </details>
+          </nav>
+          <p>Home and Components are clickable parent levels; the current location is clearly marked and the trail is exposed as a Schema.org breadcrumb list.</p>
+        </section>
+
+        <section class="panel" id="websites" aria-labelledby="websites-title">
+          <h2 id="websites-title">Useful websites</h2>
+          <p>Quick links to reference, shopping, browser, and AI services.</p>
+          <div class="link-directory">
+            <section class="link-category" id="reference-links" aria-labelledby="reference-links-title">
+              <h3 id="reference-links-title">Reference &amp; video</h3>
+              <ul>
+                <li><a href="https://www.wikipedia.org/" target="_blank" rel="noopener noreferrer">Wikipedia</a></li>
+                <li><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+              </ul>
+            </section>
+            <section class="link-category" id="shopping-links" aria-labelledby="shopping-links-title">
+              <h3 id="shopping-links-title">Shopping apps</h3>
+              <ul>
+                <li><a href="https://www.amazon.in/" target="_blank" rel="noopener noreferrer">Amazon India</a></li>
+                <li><a href="https://www.flipkart.com/" target="_blank" rel="noopener noreferrer">Flipkart</a></li>
+                <li><a href="https://www.myntra.com/" target="_blank" rel="noopener noreferrer">Myntra</a></li>
+              </ul>
+            </section>
+            <section class="link-category" id="browser-links" aria-labelledby="browser-links-title">
+              <h3 id="browser-links-title">Browsers</h3>
+              <ul>
+                <li><a href="https://www.google.com/chrome/" target="_blank" rel="noopener noreferrer">Google Chrome</a></li>
+                <li><a href="https://www.mozilla.org/firefox/" target="_blank" rel="noopener noreferrer">Mozilla Firefox</a></li>
+                <li><a href="https://www.microsoft.com/edge" target="_blank" rel="noopener noreferrer">Microsoft Edge</a></li>
+              </ul>
+            </section>
+            <section class="link-category" id="ai-links" aria-labelledby="ai-links-title">
+              <h3 id="ai-links-title">AI tools</h3>
+              <ul>
+                <li><a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPT</a></li>
+                <li><a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer">Google Gemini</a></li>
+                <li><a href="https://copilot.microsoft.com/" target="_blank" rel="noopener noreferrer">Microsoft Copilot</a></li>
+              </ul>
+            </section>
+          </div>
+        </section>
+
+        <section class="panel" id="about" aria-labelledby="about-title">
+          <h2 id="about-title">About</h2>
+          <div class="about-overview">
+            <p>Wayfinder is a responsive, CSS-led navigation demo built to make moving around a website feel clear and welcoming. It works as a standalone page, and can optionally load menu data from an Express endpoint.</p>
+            <div class="feature-grid">
+              <article class="feature-card"><h3>Responsive menus</h3><p>Header dropdowns, a two-column mega-menu, and a slide-in mobile drawer adapt to your screen.</p></article>
+              <article class="feature-card"><h3>Find your place</h3><p>Section links, breadcrumbs, and active states help show where you are and where to go next.</p></article>
+              <article class="feature-card"><h3>Useful destinations</h3><p>Open curated reference, shopping, browser, and AI websites from one link directory.</p></article>
+              <article class="feature-card"><h3>Accessible by design</h3><p>Keyboard-friendly controls, clear focus indicators, labelled landmarks, and reduced-motion support are built in.</p></article>
+              <article class="feature-card"><h3>Customizable menus</h3><p>One JSON menu configuration powers the header, sidebar, and mobile drawer, with a built-in fallback.</p></article>
+              <article class="feature-card"><h3>Personal touch</h3><p>CSS-only tabs, emoji ratings, contact cards, and an About note saved locally in your browser.</p></article>
+            </div>
+          </div>
+          <div class="about-editor">
+            <label for="about-copy">Your Wayfinder note</label>
+            <p>Add a short introduction or message for visitors. It is saved only in this browser.</p>
+            <textarea id="about-copy" placeholder="Write a short introduction about your organization, team, or work."></textarea>
+            <p id="about-save-status" aria-live="polite">Your text saves automatically on this device.</p>
+          </div>
+        </section>
+
+        <section class="panel" id="reviews" aria-labelledby="reviews-title">
+          <h2 id="reviews-title">Leave a little love</h2>
+          <p class="review-intro">Pick the emoji that fits your visit, then leave a note if you like. Your reviews are saved only in this browser.</p>
+          <div class="review-summary" aria-live="polite">
+            <span class="review-average" id="review-average">—</span>
+            <span class="review-stars" id="review-stars" aria-label="No ratings yet">☆☆☆☆☆</span>
+            <span class="review-count" id="review-count">Be the first to rate Wayfinder.</span>
+          </div>
+          <form class="review-form" id="review-form">
+            <fieldset class="emoji-rating">
+              <legend>How was your experience? <span aria-hidden="true">(choose one)</span></legend>
+              <div class="rating-options">
+                <label class="rating-choice" for="rating-1">
+                  <input id="rating-1" type="radio" name="rating" value="1" required>
+                  <span class="rating-emoji" aria-hidden="true">😞</span><span class="rating-label">Could improve</span>
+                </label>
+                <label class="rating-choice" for="rating-2">
+                  <input id="rating-2" type="radio" name="rating" value="2" required>
+                  <span class="rating-emoji" aria-hidden="true">😐</span><span class="rating-label">Just okay</span>
+                </label>
+                <label class="rating-choice" for="rating-3">
+                  <input id="rating-3" type="radio" name="rating" value="3" required>
+                  <span class="rating-emoji" aria-hidden="true">🙂</span><span class="rating-label">Good</span>
+                </label>
+                <label class="rating-choice" for="rating-4">
+                  <input id="rating-4" type="radio" name="rating" value="4" required>
+                  <span class="rating-emoji" aria-hidden="true">😄</span><span class="rating-label">Great</span>
+                </label>
+                <label class="rating-choice" for="rating-5">
+                  <input id="rating-5" type="radio" name="rating" value="5" required>
+                  <span class="rating-emoji" aria-hidden="true">🤩</span><span class="rating-label">Loved it</span>
+                </label>
+              </div>
+              <p class="review-hint" id="rating-feedback" aria-live="polite">Click an emoji to choose your rating.</p>
+            </fieldset>
+            <label for="review-text">Your review <span class="review-hint">(optional)</span></label>
+            <textarea id="review-text" name="review" maxlength="500" placeholder="What made your visit memorable?"></textarea>
+            <button class="review-submit" type="submit">Share your review</button>
+            <p class="review-status" id="review-status" aria-live="polite">Your feedback stays on this device.</p>
+          </form>
+          <div class="review-list" id="review-list" role="list" aria-label="Saved reviews"></div>
+        </section>
+
+        <section class="panel" id="schema" aria-labelledby="schema-title">
+          <h2 id="schema-title">Menu schema</h2>
+          <pre><code>CREATE TABLE menus (
+  id INTEGER PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  location VARCHAR(100) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+        </section>
+
+        <section class="panel" id="contacts" aria-labelledby="contacts-title">
+          <h2 id="contacts-title">Contacts</h2>
+          <p>Questions? Reach out or find the campus on the map.</p>
+          <p><a href="https://www.google.com/maps/search/?api=1&amp;query=MITS+Gwalior" target="_blank" rel="noopener noreferrer">Open campus map</a></p>
+          <div class="contact-list" id="contact-list">
+            <section class="contact-card">
+              <h3>Akshata Agrawal</h3>
+              <p><a href="tel:7247295540">7247295540</a></p>
+              <address>MITS Gwalior</address>
+            </section>
+            <section class="contact-card">
+              <h3>Vivek Barauliya</h3>
+              <address>MITS Gwalior</address>
+            </section>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <script type="application/json" id="navigation-config">
+    {
+      "menus": [
+        {
+          "name": "Primary navigation",
+          "location": "header",
+          "created_at": "2026-11-18T00:00:00Z",
+          "items": [
+            { "label": "Home", "href": "#main" },
+            {
+              "label": "Products",
+              "type": "dropdown",
+              "trigger": ["hover", "click"],
+              "items": [
+                {
+                  "label": "Navigation",
+                  "items": [
+                    { "label": "Menus", "href": "#menus" },
+                    { "label": "Tabs", "href": "#tabs" },
+                    { "label": "Breadcrumbs", "href": "#breadcrumbs" }
+                  ]
+                },
+                {
+                  "label": "Site pages",
+                  "items": [
+                    { "label": "Websites", "href": "#websites" },
+                    { "label": "About", "href": "#about" },
+                    { "label": "Reviews", "href": "#reviews" },
+                    { "label": "Menu schema", "href": "#schema" },
+                    { "label": "Contacts", "href": "#contacts" }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "More",
+              "type": "mega-menu",
+              "title": "Explore every section",
+              "items": [
+                {
+                  "label": "Components",
+                  "items": [
+                    { "label": "Dropdown and mega menu", "href": "#menus" },
+                    { "label": "Tabs", "href": "#tabs" },
+                    { "label": "Breadcrumbs", "href": "#breadcrumbs" },
+                    { "label": "Menu schema", "href": "#schema" }
+                  ]
+                },
+                {
+                  "label": "Website directory",
+                  "items": [
+                    { "label": "All websites", "href": "#websites" },
+                    { "label": "Reference & video", "href": "#reference-links" },
+                    { "label": "Shopping", "href": "#shopping-links" },
+                    { "label": "Browsers", "href": "#browser-links" },
+                    { "label": "AI tools", "href": "#ai-links" }
+                  ]
+                },
+                {
+                  "label": "About Wayfinder",
+                  "items": [
+                    { "label": "Features and About", "href": "#about" },
+                    { "label": "Reviews and ratings", "href": "#reviews" },
+                    { "label": "Contacts", "href": "#contacts" }
+                  ]
+                }
+              ]
+            },
+            { "label": "Websites", "href": "#websites" },
+            { "label": "Contact", "href": "#contacts" }
+          ]
+        },
+        {
+          "name": "Component navigation",
+          "location": "sidebar",
+          "created_at": "2026-11-18T00:00:00Z",
+          "items": [
+            { "label": "Menus", "href": "#menus" },
+            { "label": "Tabs", "href": "#tabs" },
+            { "label": "Breadcrumbs", "href": "#breadcrumbs" },
+            { "label": "Data", "href": "#schema" },
+            { "label": "Websites", "href": "#websites" },
+            { "label": "Reviews", "href": "#reviews" },
+            { "label": "Contacts", "href": "#contacts" }
+          ]
+        },
+        {
+          "name": "Mobile drawer",
+          "location": "drawer",
+          "id": "mobile-nav",
+          "toggle_id": "drawer-toggle",
+          "created_at": "2026-11-18T00:00:00Z",
+          "items": [
+            { "label": "Home", "href": "#main" },
+            {
+              "label": "Products",
+              "type": "dropdown",
+              "items": [
+                {
+                  "label": "Navigation",
+                  "items": [
+                    { "label": "Menus", "href": "#menus" },
+                    { "label": "Tabs", "href": "#tabs" },
+                    { "label": "Breadcrumbs", "href": "#breadcrumbs" }
+                  ]
+                },
+                {
+                  "label": "Site pages",
+                  "items": [
+                    { "label": "Websites", "href": "#websites" },
+                    { "label": "About", "href": "#about" },
+                    { "label": "Reviews", "href": "#reviews" },
+                    { "label": "Menu schema", "href": "#schema" },
+                    { "label": "Contacts", "href": "#contacts" }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "More",
+              "type": "mega-menu",
+              "title": "Explore every section",
+              "items": [
+                {
+                  "label": "Components",
+                  "items": [
+                    { "label": "Dropdown and mega menu", "href": "#menus" },
+                    { "label": "Tabs", "href": "#tabs" },
+                    { "label": "Breadcrumbs", "href": "#breadcrumbs" },
+                    { "label": "Menu schema", "href": "#schema" }
+                  ]
+                },
+                {
+                  "label": "Website directory",
+                  "items": [
+                    { "label": "All websites", "href": "#websites" },
+                    { "label": "Reference & video", "href": "#reference-links" },
+                    { "label": "Shopping", "href": "#shopping-links" },
+                    { "label": "Browsers", "href": "#browser-links" },
+                    { "label": "AI tools", "href": "#ai-links" }
+                  ]
+                },
+                {
+                  "label": "About Wayfinder",
+                  "items": [
+                    { "label": "Features and About", "href": "#about" },
+                    { "label": "Reviews and ratings", "href": "#reviews" },
+                    { "label": "Contacts", "href": "#contacts" }
+                  ]
+                }
+              ]
+            },
+            { "label": "Websites", "href": "#websites" },
+            { "label": "Contact", "href": "#contacts" },
+            { "label": "About", "href": "#about" },
+            { "label": "Reviews", "href": "#reviews" }
+          ]
+        }
+      ],
+      "contacts": [
+        {
+          "name": "Akshata Agrawal",
+          "phone": "7247295540",
+          "address": "MITS Gwalior"
+        },
+        {
+          "name": "Vivek Barauliya",
+          "address": "MITS Gwalior"
+        }
+      ]
+    }
+  </script>
+  <script>
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    if (!window.location.hash) window.scrollTo(0, 0);
+
+    const configElement = document.querySelector("#navigation-config");
+    const fallbackConfig = JSON.parse(configElement.textContent);
+    const primaryNav = document.querySelector("#primary-nav");
+    const mobileNav = document.querySelector("#mobile-nav");
+    const sidebarNav = document.querySelector("#sidebar-links");
+    const contactList = document.querySelector("#contact-list");
+    const drawerToggle = document.querySelector("#drawer-toggle");
+    const aboutCopy = document.querySelector("#about-copy");
+    const aboutSaveStatus = document.querySelector("#about-save-status");
+    const aboutStorageKey = "navigation-about-copy";
+    const reviewForm = document.querySelector("#review-form");
+    const reviewText = document.querySelector("#review-text");
+    const reviewStatus = document.querySelector("#review-status");
+    const reviewList = document.querySelector("#review-list");
+    const reviewAverage = document.querySelector("#review-average");
+    const reviewStars = document.querySelector("#review-stars");
+    const reviewCount = document.querySelector("#review-count");
+    const ratingFeedback = document.querySelector("#rating-feedback");
+    const reviewStorageKey = "wayfinder-reviews";
+    const reviewRatings = {
+      1: { emoji: "😞", label: "Could improve" },
+      2: { emoji: "😐", label: "Just okay" },
+      3: { emoji: "🙂", label: "Good" },
+      4: { emoji: "😄", label: "Great" },
+      5: { emoji: "🤩", label: "Loved it" }
+    };
+    let savedReviews = [];
+    let reviewStorageReady = true;
+
+    document.querySelector(".locate-link").addEventListener("click", () => {
+      const siteHeader = document.querySelector("#site-home");
+      siteHeader.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
+      });
+      siteHeader.focus({ preventScroll: true });
+    });
+
+    function safeHref(value) {
+      return typeof value === "string" &&
+        (value.startsWith("#") || (value.startsWith("/") && !value.startsWith("//")));
+    }
+
+    function createLink(item) {
+      if (!item || typeof item.label !== "string" || !safeHref(item.href)) return null;
+
+      const link = document.createElement("a");
+      link.href = item.href;
+      link.textContent = item.label;
+      return link;
+    }
+
+    function createMenuList(items) {
+      const list = document.createElement("ul");
+      items.forEach(item => {
+        if (!item || typeof item.label !== "string") return;
+
+        const entry = document.createElement("li");
+        if (Array.isArray(item.items)) {
+          entry.className = "menu-group";
+          const heading = document.createElement("h3");
+          heading.textContent = item.label;
+          entry.append(heading, createMenuList(item.items));
+        } else {
+          const link = createLink(item);
+          if (!link) return;
+          entry.append(link);
+        }
+        list.append(entry);
+      });
+      return list;
+    }
+
+    function createNavItem(item) {
+      if (!item || typeof item.label !== "string") return null;
+      if (!Array.isArray(item.items)) return createLink(item);
+
+      const group = document.createElement("details");
+      group.className = "nav-dropdown";
+
+      const summary = document.createElement("summary");
+      summary.textContent = item.label;
+
+      const menu = document.createElement("div");
+      menu.className = item.type === "mega-menu" ? "dropdown-menu mega-menu" : "dropdown-menu";
+      if (item.type === "mega-menu") {
+        const heading = document.createElement("h2");
+        heading.textContent = item.title || item.label;
+        menu.append(heading);
+      }
+
+      menu.append(createMenuList(item.items));
+      group.append(summary, menu);
+      return group;
+    }
+
+    function renderLinks(container, items, builder) {
+      container.replaceChildren();
+      items.forEach(item => {
+        const element = builder(item);
+        if (element) container.append(element);
+      });
+    }
+
+    function renderContacts(contacts) {
+      contactList.replaceChildren();
+      contacts.forEach(person => {
+        if (!person || typeof person.name !== "string" || typeof person.address !== "string") return;
+
+        const card = document.createElement("section");
+        card.className = "contact-card";
+        const name = document.createElement("h3");
+        name.textContent = person.name;
+        card.append(name);
+
+        if (typeof person.phone === "string" && /^\d+$/.test(person.phone)) {
+          const phone = document.createElement("a");
+          phone.href = `tel:${person.phone}`;
+          phone.textContent = person.phone;
+          const phoneLine = document.createElement("p");
+          phoneLine.append(phone);
+          card.append(phoneLine);
+        }
+
+        const address = document.createElement("address");
+        address.textContent = person.address;
+        card.append(address);
+        contactList.append(card);
+      });
+    }
+
+    function isNavigationConfig(value) {
+      return value && Array.isArray(value.menus) &&
+        value.menus.some(menu => menu && menu.location === "header" && Array.isArray(menu.items));
+    }
+
+    function renderNavigation(config) {
+      const header = config.menus.find(menu => menu.location === "header");
+      const sidebar = config.menus.find(menu => menu.location === "sidebar");
+      const drawer = config.menus.find(menu => menu.location === "drawer");
+
+      if (!header || !Array.isArray(header.items)) return;
+      renderLinks(primaryNav, header.items, createNavItem);
+      if (drawer && typeof drawer.id === "string" && /^[A-Za-z][A-Za-z0-9_-]*$/.test(drawer.id)) {
+        mobileNav.id = drawer.id;
+        drawerToggle.setAttribute("aria-controls", drawer.id);
+        document.querySelector(".menu-button").setAttribute("aria-controls", drawer.id);
+      }
+      if (drawer && typeof drawer.toggle_id === "string" && /^[A-Za-z][A-Za-z0-9_-]*$/.test(drawer.toggle_id)) {
+        drawerToggle.id = drawer.toggle_id;
+        document.querySelector(".menu-button").htmlFor = drawer.toggle_id;
+        document.querySelector(".drawer-backdrop").htmlFor = drawer.toggle_id;
+      }
+      renderLinks(mobileNav, drawer && Array.isArray(drawer.items) ? drawer.items : header.items, createNavItem);
+      if (sidebar && Array.isArray(sidebar.items)) {
+        renderLinks(sidebarNav, sidebar.items, createLink);
+      }
+      renderContacts(Array.isArray(config.contacts) ? config.contacts : fallbackConfig.contacts);
+      updateActiveLinks();
+    }
+
+    function updateActiveLinks(target = window.location.hash || "#main", preferredLink = null) {
+      [primaryNav, mobileNav, sidebarNav].forEach(container => {
+        const links = [...container.querySelectorAll("a[href]")];
+        const matchingLinks = links.filter(link => {
+          const href = link.getAttribute("href");
+          if (href === target) return true;
+
+          const destination = new URL(href, window.location.href);
+          if (target.startsWith("#")) return destination.hash === target;
+          if (target.includes("#")) {
+            const targetUrl = new URL(target, window.location.href);
+            return destination.pathname === targetUrl.pathname && destination.hash === targetUrl.hash;
+          }
+          return destination.pathname === target && !destination.hash;
+        });
+        const activeLink = matchingLinks.find(link => link === preferredLink) ||
+          matchingLinks.find(link => link.parentElement === container) || matchingLinks[0];
+
+        links.forEach(link => {
+          if (link === activeLink) link.setAttribute("aria-current", "page");
+          else link.removeAttribute("aria-current");
+        });
+
+        container.querySelectorAll("details").forEach(group => {
+          const summary = group.querySelector("summary");
+          if (group.querySelector('[aria-current="page"]')) summary.setAttribute("aria-current", "page");
+          else summary.removeAttribute("aria-current");
+        });
+      });
+    }
+
+    async function loadNavigation() {
+      const endpoint = document.body.dataset.navigationApi;
+      if (!endpoint || window.location.protocol === "file:") return fallbackConfig;
+
+      try {
+        const response = await fetch(endpoint, { headers: { Accept: "application/json" } });
+        if (!response.ok) throw new Error("Navigation API request failed");
+        const data = await response.json();
+        if (!isNavigationConfig(data)) {
+          console.error("Navigation API returned invalid menu data; using the built-in menu.");
+          return fallbackConfig;
+        }
+        return data;
+      } catch (error) {
+        console.error("Could not load menu data from the navigation API; using the built-in menu.", error);
+        return fallbackConfig;
+      }
+    }
+
+    renderNavigation(fallbackConfig);
+    loadNavigation().then(renderNavigation);
+    let clickedNavigationLink = null;
+    window.addEventListener("hashchange", () => {
+      const target = window.location.hash || "#main";
+      clickedNavigationLink = clickedNavigationLink && clickedNavigationLink.getAttribute("href") === target
+        ? clickedNavigationLink
+        : null;
+      updateActiveLinks(target, clickedNavigationLink);
+    });
+    document.addEventListener("click", event => {
+      const link = event.target.closest("a[href]");
+      if (!link || ![primaryNav, mobileNav, sidebarNav].some(container => container.contains(link))) return;
+
+      clickedNavigationLink = link;
+      updateActiveLinks(link.getAttribute("href"), clickedNavigationLink);
+      if (mobileNav.contains(link)) drawerToggle.checked = false;
+    });
+    try {
+      aboutCopy.value = localStorage.getItem(aboutStorageKey) || "";
+    } catch {
+      aboutSaveStatus.textContent = "Text storage is unavailable in this browser.";
+    }
+    aboutCopy.addEventListener("input", () => {
+      try {
+        localStorage.setItem(aboutStorageKey, aboutCopy.value);
+        aboutSaveStatus.textContent = "Saved on this device.";
+      } catch {
+        aboutSaveStatus.textContent = "Unable to save in this browser.";
+      }
+    });
+
+    function isStoredReview(value) {
+      return value && Number.isInteger(value.rating) && value.rating >= 1 && value.rating <= 5 &&
+        typeof value.text === "string" && value.text.length <= 500 &&
+        typeof value.createdAt === "string" && Number.isFinite(Date.parse(value.createdAt));
+    }
+
+    function readStoredReviews() {
+      const stored = localStorage.getItem(reviewStorageKey);
+      if (stored === null) return [];
+
+      const parsed = JSON.parse(stored);
+      if (!Array.isArray(parsed) || !parsed.every(isStoredReview)) {
+        throw new Error("Saved review data has an invalid format.");
+      }
+      return parsed;
+    }
+
+    function renderReviews() {
+      const total = savedReviews.reduce((sum, review) => sum + review.rating, 0);
+      const average = savedReviews.length ? total / savedReviews.length : 0;
+      const roundedAverage = Math.round(average);
+      reviewAverage.textContent = savedReviews.length ? average.toFixed(1) : "—";
+      reviewStars.textContent = `${"★".repeat(roundedAverage)}${"☆".repeat(5 - roundedAverage)}`;
+      reviewStars.setAttribute("aria-label", savedReviews.length
+        ? `${average.toFixed(1)} out of 5 stars`
+        : "No ratings yet");
+      reviewCount.textContent = savedReviews.length
+        ? `${savedReviews.length} ${savedReviews.length === 1 ? "review" : "reviews"}`
+        : "Be the first to rate Wayfinder.";
+      reviewList.replaceChildren();
+
+      savedReviews.forEach(review => {
+        const card = document.createElement("article");
+        card.className = "review-card";
+        card.setAttribute("role", "listitem");
+
+        const header = document.createElement("header");
+        const title = document.createElement("h3");
+        title.textContent = `${reviewRatings[review.rating].emoji} ${reviewRatings[review.rating].label} · ${review.rating}/5`;
+        const date = document.createElement("time");
+        date.dateTime = review.createdAt;
+        date.textContent = new Date(review.createdAt).toLocaleDateString();
+        header.append(title, date);
+        card.append(header);
+
+        if (review.text) {
+          const note = document.createElement("p");
+          note.textContent = review.text;
+          card.append(note);
+        }
+        reviewList.append(card);
+      });
+    }
+
+    try {
+      savedReviews = readStoredReviews();
+      renderReviews();
+    } catch (error) {
+      console.error("Could not load saved reviews.", error);
+      reviewStorageReady = false;
+      reviewStatus.textContent = "Saved reviews could not be loaded. Your browser's saved review data may be invalid or unavailable.";
+      reviewForm.querySelector("button[type='submit']").disabled = true;
+    }
+
+    reviewForm.querySelectorAll("input[name='rating']").forEach(input => {
+      input.addEventListener("change", event => {
+        const rating = Number(event.currentTarget.value);
+        ratingFeedback.textContent = `You chose ${reviewRatings[rating].label.toLowerCase()} (${rating} out of 5).`;
+      });
+    });
+
+    reviewForm.addEventListener("submit", event => {
+      event.preventDefault();
+      if (!reviewStorageReady) return;
+
+      const rating = Number(new FormData(reviewForm).get("rating"));
+      if (!Number.isInteger(rating) || !reviewRatings[rating]) {
+        ratingFeedback.textContent = "Choose an emoji rating before sharing your review.";
+        return;
+      }
+
+      const review = {
+        rating,
+        text: reviewText.value.trim(),
+        createdAt: new Date().toISOString()
+      };
+      const updatedReviews = [review, ...savedReviews];
+      try {
+        localStorage.setItem(reviewStorageKey, JSON.stringify(updatedReviews));
+      } catch (error) {
+        console.error("Could not save your review.", error);
+        reviewStatus.textContent = "Your review could not be saved in this browser. Check available storage and try again.";
+        return;
+      }
+
+      savedReviews = updatedReviews;
+      renderReviews();
+      reviewForm.reset();
+      ratingFeedback.textContent = "Click an emoji to choose your rating.";
+      reviewStatus.textContent = "Thank you — your review is saved on this device.";
+    });
+  </script>
+  <footer>Wayfinder — a friendly starting point for the web</footer>
+</body>
+</html>
