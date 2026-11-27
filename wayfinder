@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Wayfinder is a friendly, responsive starting point for finding useful websites and navigating the web.">
-  <title>Wayfinder — Find your way around the web</title>
+  <meta name="description" content="Wayfinder helps new entrepreneurs discover ideas, research opportunities, design brands, and find tools to launch.">
+  <title>Wayfinder — Find your next big idea</title>
   <style>
     @layer reset, tokens, layout, components, states, responsive;
 
@@ -15,6 +15,8 @@
       a { color: inherit; text-decoration: none; }
       summary { cursor: pointer; list-style: none; }
       summary::-webkit-details-marker { display: none; }
+      button, textarea, input { font: inherit; }
+      button { cursor: pointer; }
     }
 
     @layer tokens {
@@ -27,14 +29,22 @@
         --page-color: #f6f1e4;
         --surface-color: #fffaf0;
         --accent-color: #b86f3e;
+        --glass: rgba(255, 250, 240, .78);
+        --glass-strong: rgba(255, 253, 248, .92);
+        --ring: rgba(184, 111, 62, .28);
+        --shadow: 0 18px 50px rgba(37, 40, 32, .10);
       }
     }
 
     @layer layout {
       body {
         color: var(--text-color);
-        background: var(--page-color);
-        font: 16px/1.5 system-ui, sans-serif;
+        background:
+          radial-gradient(circle at 12% 20%, rgba(184,111,62,.09), transparent 22rem),
+          radial-gradient(circle at 88% 72%, rgba(41,72,58,.10), transparent 28rem),
+          var(--page-color);
+        font: 16px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        letter-spacing: -.01em;
       }
 
       main {
@@ -62,8 +72,8 @@
       }
       .opening-page::before {
         position: absolute;
-        top: 10%;
-        right: -200px;
+        top: 15%;
+        right: -230px;
         z-index: -1;
         width: 420px;
         height: 420px;
@@ -71,30 +81,37 @@
         background: repeating-conic-gradient(from 15deg, #d7b6680a 0 12deg, transparent 12deg 24deg);
         border: 1px solid #d7b6682b;
         border-radius: 50%;
+        opacity: .8;
       }
+      .opening-page::after { position: absolute; bottom: -290px; left: 18%; z-index: -1; width: 520px; height: 520px; content: ""; background: radial-gradient(circle, #d7b66810, transparent 68%); border: 1px solid #d7b6682b; border-radius: 50%; pointer-events: none; }
       .opening-topbar, .opening-layout, .opening-footer { width: min(1120px, 100%); margin: 0 auto; }
-      .opening-topbar { min-height: 76px; display: flex; align-items: center; justify-content: space-between; }
+      .opening-topbar { min-height: 86px; display: flex; align-items: center; justify-content: space-between; }
       .opening-brand { display: inline-flex; align-items: center; gap: 10px; color: #f4ecd5; font-size: 19px; font-weight: 850; letter-spacing: -.04em; }
-      .opening-mark { width: 34px; height: 34px; display: grid; place-items: center; color: #1d392f; background: #d7b668; border-radius: 11px; }
+      .opening-mark { width: 34px; height: 34px; display: grid; place-items: center; color: #1d392f; background: #d7b668; border-radius: 11px; box-shadow: 0 5px 12px #344c3830; }
       .opening-note { color: #d6cfba; font-size: 13px; font-weight: 650; letter-spacing: .04em; }
-      .opening-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(270px, .85fr); gap: clamp(24px, 7vw, 84px); align-items: center; padding: 20px 0 42px; }
+      .opening-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, .9fr); gap: clamp(30px, 7vw, 90px); align-items: center; padding: 32px 0 64px; }
       .opening-copy { max-width: 610px; animation: welcome-in .7s both; }
-      .opening-eyebrow { display: inline-block; margin-bottom: 18px; padding: 7px 12px; color: #eddfb6; background: #ffffff0b; border: 1px solid #d7b66865; border-radius: 999px; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-      .opening-copy h1 { max-width: 620px; margin: 0; color: #fff8e9; font-size: clamp(46px, 7.5vw, 82px); line-height: .99; letter-spacing: -.065em; }
-      .opening-copy p { max-width: 500px; margin: 22px 0 28px; color: #dedccf; font-size: clamp(17px, 2vw, 20px); }
-      .locate-link { min-height: 58px; display: inline-flex; align-items: center; gap: 13px; padding: 8px 19px 8px 9px; color: #1e392f; background: #d7b668; border: 2px solid #d7b668; border-radius: 15px; box-shadow: 0 10px 26px #070d0b4a; font: inherit; font-weight: 800; cursor: pointer; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+      .opening-eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; padding: 7px 12px; color: #eddfb6; background: #ffffff0b; border: 1px solid #d7b66865; border-radius: 999px; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+      .opening-eyebrow span { color: #e1bd68; }
+      .opening-copy h1 { max-width: 660px; margin: 0; color: #fff8e9; font-size: clamp(46px, 7.5vw, 86px); line-height: .99; letter-spacing: -.065em; }
+      .opening-copy p { max-width: 500px; margin: 22px 0 30px; color: #dedccf; font-size: clamp(17px, 2vw, 20px); }
+      .locate-link { min-height: 60px; display: inline-flex; align-items: center; gap: 14px; padding: 8px 20px 8px 9px; color: #1e392f; background: #d7b668; border: 2px solid #d7b668; border-radius: 16px; box-shadow: 0 10px 26px #070d0b4a; font: inherit; font-weight: 800; text-decoration: none; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
       .locate-link:hover { background: #e3c77a; border-color: #e3c77a; box-shadow: 0 14px 30px #070d0b55; transform: translateY(-3px); }
-      .locate-icon { width: 40px; height: 40px; display: grid; place-items: center; color: #e3c77a; background: #24463a; border-radius: 12px; }
+      .locate-icon { width: 42px; height: 42px; display: grid; flex: 0 0 auto; place-items: center; color: #e3c77a; background: #24463a; border-radius: 12px; animation: pin-bob 2.8s ease-in-out infinite; }
       .locate-icon svg { width: 22px; height: 22px; }
-      .opening-hint { display: block; margin-top: 11px; color: #c9c4b3; font-size: 12px; }
-      .opening-art { position: relative; min-height: 340px; display: grid; place-items: center; animation: welcome-in .85s .12s both; }
-      .opening-map { position: relative; width: min(100%, 350px); min-height: 285px; overflow: hidden; background-color: #f5eedb; background-image: linear-gradient(34deg, transparent 46%, #b8c5a9 47%, #b8c5a9 49%, transparent 50%), linear-gradient(145deg, transparent 47%, #d8c79e 48%, #d8c79e 50%, transparent 51%), repeating-linear-gradient(45deg, transparent 0 18px, #b9974f10 18px 20px); background-size: 95px 82px, 115px 104px, 32px 32px; border: 9px solid #f7f0df; border-radius: 28px; box-shadow: 0 30px 65px #050d0a55, 0 4px 12px #050d0a30; transform: rotate(3deg); }
-      .opening-map-label { position: absolute; top: 16px; left: 16px; z-index: 1; padding: 7px 10px; color: #284638; background: #fff9e9ed; border: 1px solid #d7c89f; border-radius: 999px; font-size: 11px; font-weight: 800; }
-      .opening-route { position: absolute; inset: 18% 10%; width: 80%; height: 68%; overflow: visible; }
+      .opening-hint { display: block; margin-top: 12px; color: #c9c4b3; font-size: 12px; }
+      .opening-art { position: relative; width: min(100%, 430px); min-height: 370px; display: grid; place-items: center; justify-self: center; animation: welcome-in .85s .12s both; }
+      .opening-map { position: relative; width: min(100%, 370px); aspect-ratio: 1 / .94; overflow: hidden; background-color: #f5eedb; background-image: linear-gradient(34deg, transparent 46%, #b8c5a9 47%, #b8c5a9 49%, transparent 50%), linear-gradient(145deg, transparent 47%, #d8c79e 48%, #d8c79e 50%, transparent 51%), linear-gradient(90deg, transparent 47%, #d4d8c5 48%, #d4d8c5 49%, transparent 50%), repeating-linear-gradient(45deg, transparent 0 18px, #b9974f10 18px 20px); background-size: 95px 82px, 115px 104px, 76px 70px, 32px 32px; border: 9px solid #f7f0df; border-radius: 30px; box-shadow: 0 30px 65px #050d0a55, 0 4px 12px #050d0a30; transform: rotate(3deg); }
+      .opening-map::before, .opening-map::after { position: absolute; content: ""; border: 1px solid #b38d4b3b; border-radius: 50%; pointer-events: none; }
+      .opening-map::before { inset: 14% 20%; }
+      .opening-map::after { inset: 27% 8%; }
+      .opening-map-label { position: absolute; top: 18px; left: 18px; z-index: 1; padding: 7px 10px; color: #284638; background: #fff9e9ed; border: 1px solid #d7c89f; border-radius: 999px; font-size: 11px; font-weight: 800; }
+      .opening-route { position: absolute; inset: 15% 11%; width: 78%; height: 72%; overflow: visible; }
       .opening-route path { stroke-dasharray: 4 11; animation: route-draw 2s ease-out both; }
-      .opening-pin { position: absolute; top: 43%; right: 23%; width: 52px; height: 52px; display: grid; place-items: center; color: white; background: #bd6942; border: 5px solid #fff9e9; border-radius: 50% 50% 50% 8px; box-shadow: 0 8px 18px #25282030; transform: rotate(-45deg); animation: pin-pulse 2.4s ease-in-out infinite; }
-      .opening-pin span { transform: rotate(45deg); font-size: 16px; }
-      .opening-footer { padding: 17px 0 22px; display: flex; justify-content: space-between; gap: 16px; color: #c9c4b3; border-top: 1px solid #d7b66845; font-size: 12px; }
+      .opening-pin { position: absolute; top: 43%; right: 24%; width: 54px; height: 54px; display: grid; place-items: center; color: white; background: #bd6942; border: 5px solid #fff9e9; border-radius: 50% 50% 50% 8px; box-shadow: 0 8px 18px #25282030; transform: rotate(-45deg); animation: pin-bob 2.8s ease-in-out infinite; }
+      .opening-pin span { transform: rotate(45deg); font-size: 18px; }
+      .opening-map-note { position: absolute; right: 14%; bottom: 17%; z-index: 1; padding: 7px 11px; color: #f5eedb; background: #365646; border-radius: 999px; font-size: 11px; font-weight: 800; }
+      .opening-footer { padding: 20px 0 26px; display: flex; justify-content: space-between; gap: 16px; color: #c9c4b3; border-top: 1px solid #d7b66845; font-size: 12px; }
       .opening-footer strong { color: #e0c47a; }
 
       .intro {
@@ -162,7 +179,8 @@
       .feature-card p { margin: 0; color: var(--muted-color); font-size: 13px; }
       .about-editor { margin-top: 8px; padding-top: 16px; border-top: 1px solid var(--border-color); }
       .content-grid { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 24px; align-items: start; }
-      .component-list { min-width: 0; }
+      .component-list { min-width: 0; container-type: inline-size; container-name: components; }
+      .link-directory { container-type: inline-size; container-name: directory; }
       footer { padding: 24px; text-align: center; color: var(--muted-color); border-top: 1px solid var(--border-color); }
     }
 
@@ -177,9 +195,10 @@
         display: flex;
         align-items: center;
         gap: 16px;
-        background: #fffdf8ed;
-        backdrop-filter: blur(14px);
-        border-bottom: 1px solid var(--border-color);
+        background: var(--glass);
+        backdrop-filter: blur(18px) saturate(140%);
+        border-bottom: 1px solid rgba(255,255,255,.48);
+        box-shadow: 0 8px 30px rgba(37,40,32,.06);
       }
       .site-name { margin-right: auto; color: var(--primary-color); font-size: 19px; font-weight: 800; letter-spacing: -.04em; }
       .site-name::before { content: "✦ "; color: var(--accent-color); }
@@ -222,16 +241,50 @@
       .button { padding: 10px 16px; color: white; font-weight: 700; background: var(--primary-color); border-radius: 10px; }
       .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
-      .drawer-toggle, .menu-button, .mobile-drawer, .drawer-backdrop { display: none; }
+      .menu-button { display: none; border: 0; background: transparent; }
       .menu-button span { width: 20px; height: 2px; background: var(--text-color); }
-      .drawer-toggle:focus-visible + .menu-button { outline: 3px solid #e0b84f; outline-offset: 3px; }
+      .mobile-drawer { display: none; }
+
+      /* Modern popover navigation. Anchor positioning is the progressive enhancement
+         that keeps each panel attached to its trigger; popover supplies top-layer state. */
+      .nav-popover-trigger { anchor-name: --nav-trigger; }
+      .nav-popover {
+        margin: 0;
+        inset: auto;
+        position: fixed;
+        position-anchor: --nav-trigger;
+        position-area: block-end span-inline-end;
+        position-try-fallbacks: flip-inline, flip-block;
+        width: 210px;
+        max-width: min(600px, calc(100vw - 24px));
+      }
+      .nav-popover.mega-menu { width: min(600px, calc(100vw - 24px)); }
+      .nav-popover:popover-open {
+        animation: popover-arrive .16s ease-out both;
+      }
+      .nav-popover::backdrop { background: transparent; }
+      .nav-popover-trigger {
+        padding: 10px 8px;
+        color: var(--muted-color);
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        font: inherit;
+      }
+      .nav-popover-trigger::after { content: " ▾"; }
+      .nav-popover-trigger[aria-expanded="true"] { color: var(--primary-color); background: var(--hover-color); }
+      .nav-links > .nav-dropdown:nth-child(2) > .nav-popover-trigger { anchor-name: --nav-products-trigger; }
+      .nav-links > .nav-dropdown:nth-child(2) > .nav-popover { position-anchor: --nav-products-trigger; }
+      .nav-links > .nav-dropdown:nth-child(3) > .nav-popover-trigger { anchor-name: --nav-more-trigger; }
+      .nav-links > .nav-dropdown:nth-child(3) > .nav-popover { position-anchor: --nav-more-trigger; }
 
       .sidebar, .panel {
         padding: 18px;
-        background: var(--surface-color);
-        border: 1px solid var(--border-color);
-        border-radius: 16px;
-        box-shadow: 0 6px 20px #25282008;
+        background: var(--glass);
+        backdrop-filter: blur(16px) saturate(130%);
+        border: 1px solid rgba(255,255,255,.58);
+        border-radius: 18px;
+        box-shadow: var(--shadow), inset 0 1px rgba(255,255,255,.55);
       }
       .sidebar h2 { margin: 0 0 10px; font-size: 14px; }
       .sidebar a { display: block; padding: 8px; color: var(--muted-color); }
@@ -276,12 +329,34 @@
       .contact-card h3 { margin: 0 0 8px; font-size: 16px; }
       .contact-card p, .contact-card address { margin: 4px 0; color: var(--muted-color); font-size: 14px; font-style: normal; }
       .contact-card a { color: var(--primary-color); }
-      .link-directory { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
-      .link-category { padding: 16px; background: linear-gradient(145deg, var(--surface-color), #f5f2e9); border: 1px solid var(--border-color); border-radius: 12px; }
-      .link-category h3 { margin: 0 0 10px; color: #354b37; font-size: 16px; }
+      .link-directory { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 12px; }
+      .link-category { grid-column: span 6; min-width: 0; padding: 14px; background: rgba(255,255,255,.48); border: 1px solid rgba(255,255,255,.62); border-radius: 16px; box-shadow: inset 0 1px rgba(255,255,255,.65); }
+      .link-category h3 { margin: 0 0 10px; color: #354b37; font-size: 14px; letter-spacing: -.01em; }
       .link-category ul { margin: 0; padding: 0; list-style: none; }
-      .link-category li + li { margin-top: 6px; }
-      .link-category a { color: var(--primary-color); font-weight: 600; }
+      .link-category ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .link-category li + li { margin-top: 0; }
+      .link-category li { min-width: 0; }
+      .link-category a { min-height: 76px; display: grid; grid-template-columns: 42px minmax(0, 1fr); align-items: center; gap: 10px; padding: 9px; color: var(--primary-color); background: rgba(255,255,255,.58); border: 1px solid rgba(41,72,58,.10); border-radius: 12px; font-size: 13px; font-weight: 800; transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease, background .16s ease; }
+      .link-category a:hover { transform: translateY(-3px); background: var(--glass-strong); border-color: var(--ring); box-shadow: 0 12px 24px rgba(37,40,32,.10); }
+      .link-category a:focus-visible { outline-offset: 3px; }
+      .portal-search { min-height: 52px; display: grid; grid-template-columns: 22px minmax(0,1fr) auto; align-items: center; gap: 10px; margin: 0 0 12px; padding: 8px 10px 8px 14px; color: var(--muted-color); background: var(--glass-strong); backdrop-filter: blur(14px); border: 1px solid rgba(41,72,58,.14); border-radius: 14px; box-shadow: 0 10px 28px rgba(37,40,32,.07), inset 0 1px rgba(255,255,255,.72); }
+      .portal-search:focus-within { border-color: var(--ring); box-shadow: 0 0 0 4px rgba(184,111,62,.10), 0 12px 30px rgba(37,40,32,.09); }
+      .portal-search svg { width: 20px; }
+      .portal-search input { width: 100%; min-width: 0; height: 34px; padding: 0; color: var(--text-color); background: transparent; border: 0; outline: 0; font-size: 15px; }
+      .portal-search input::placeholder { color: var(--muted-color); }
+      .portal-search kbd { padding: 4px 7px; color: var(--muted-color); background: rgba(41,72,58,.07); border: 1px solid rgba(41,72,58,.10); border-radius: 7px; font-size: 11px; }
+      .link-icon { width: 42px; height: 42px; display: grid; place-items: center; color: #fffaf0; background: linear-gradient(145deg, var(--primary-color), #5c745f); border: 1px solid rgba(255,255,255,.38); border-radius: 11px; box-shadow: 0 8px 16px rgba(41,72,58,.16); font-size: 16px; }
+      .link-category a strong, .link-category a small { display: block; min-width: 0; }
+      .link-category a strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .link-category a small { margin-top: 2px; color: var(--muted-color); font-size: 11px; line-height: 1.35; font-weight: 600; }
+      .discovery-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 12px 0; }
+      .discovery-card { min-width: 0; overflow: hidden; background: var(--glass-strong); border: 1px solid rgba(41,72,58,.11); border-radius: 15px; box-shadow: 0 10px 24px rgba(37,40,32,.07); transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+      .discovery-card:hover { transform: translateY(-4px); border-color: var(--ring); box-shadow: 0 16px 32px rgba(37,40,32,.12); }
+      .discovery-card svg { width: 100%; height: 96px; display: block; object-fit: cover; }
+      .discovery-card > span { display: block; padding: 9px 11px 11px; }
+      .discovery-card small, .discovery-card strong { display: block; }
+      .discovery-card small { margin-bottom: 3px; color: var(--accent-color); font-size: 9px; font-weight: 900; letter-spacing: .11em; }
+      .discovery-card strong { color: var(--primary-color); font-size: 13px; line-height: 1.25; }
       .sample-navbar {
         padding: 12px;
         display: flex;
@@ -337,10 +412,25 @@
       .visual-mega-feature p { margin: 0; color: var(--muted-color); font-size: 8px; }
       .menu-visual-caption { margin: 10px 2px 0; line-height: 1.45; }
 
-      .tabs { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; padding: 0; border: 0; }
-      .tabs input { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-      .tabs label { padding: 9px 14px; cursor: pointer; color: var(--muted-color); }
-      .tab-content { display: none; width: 100%; padding: 14px 4px 4px; }
+      .tabs { container-type: inline-size; container-name: tabs; }
+      .tab-labels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; border-bottom: 1px solid var(--border-color); }
+      .tab-labels a { position: relative; padding: 10px 12px; color: var(--muted-color); text-align: center; border-radius: 8px 8px 0 0; }
+      .tab-labels a::after { position: absolute; right: 12px; bottom: -1px; left: 12px; height: 2px; content: ""; background: var(--primary-color); scale: 0 1; transition: scale .18s ease; }
+      .tab-labels a:target,
+      .tab-labels a[aria-current="page"] { color: var(--primary-color); }
+      .tab-labels a:target::after,
+      .tab-labels a[aria-current="page"]::after { scale: 1 1; }
+      .tab-viewport {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 100%;
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+        scroll-behavior: smooth;
+        scroll-snap-type: inline mandatory;
+        scrollbar-width: thin;
+      }
+      .tab-content { min-width: 0; width: 100%; padding: 14px 4px 4px; scroll-snap-align: start; scroll-snap-stop: always; }
       .tab-content h3 { margin: 0 0 5px; color: var(--primary-color); font-size: 16px; }
       .tab-content > p { margin: 0; color: var(--muted-color); }
       .tab-detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 9px; margin-top: 12px; }
@@ -410,6 +500,10 @@
         from { opacity: 0; translate: 0 14px; }
         to { opacity: 1; translate: 0 0; }
       }
+      @keyframes pin-bob {
+        0%, 100% { translate: 0 0; }
+        50% { translate: 0 -7px; }
+      }
       @keyframes panel-arrive {
         from { opacity: 0; translate: 0 10px; }
         to { opacity: 1; translate: 0 0; }
@@ -447,30 +541,27 @@
         transform: translateY(0);
         visibility: visible;
       }
-      #tab-overview:checked ~ .tab-labels label[for="tab-overview"],
-      #tab-activity:checked ~ .tab-labels label[for="tab-activity"],
-      #tab-settings:checked ~ .tab-labels label[for="tab-settings"] {
-        color: var(--primary-color);
-        border-bottom: 2px solid var(--primary-color);
+      .nav-links [aria-current="page"] { view-transition-name: nav-active-page; }
+      ::view-transition-group(nav-active-page) { animation-duration: .22s; }
+      @keyframes popover-arrive {
+        from { opacity: 0; transform: translateY(6px) scale(.98); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
       }
-      #tab-overview:checked ~ .tab-content.tab-overview,
-      #tab-activity:checked ~ .tab-content.tab-activity,
-      #tab-settings:checked ~ .tab-content.tab-settings { display: block; }
-      #tab-overview:focus-visible ~ .tab-labels label[for="tab-overview"],
-      #tab-activity:focus-visible ~ .tab-labels label[for="tab-activity"],
-      #tab-settings:focus-visible ~ .tab-labels label[for="tab-settings"] { outline: 2px solid var(--primary-color); outline-offset: 2px; }
     }
 
     @layer responsive {
+      @media (max-width: 760px) {
+        .opening-layout { grid-template-columns: minmax(0, 1fr); gap: 18px; padding: 42px 0 48px; }
+        .opening-copy { margin: auto; text-align: center; }
+        .opening-copy p { margin-right: auto; margin-left: auto; }
+        .opening-art { min-height: 310px; }
+        .opening-map { width: min(82vw, 340px); }
+        .opening-footer { flex-wrap: wrap; }
+      }
+
       @media (max-width: 680px) {
         main { width: min(100% - 32px, 560px); padding: 32px 0; }
-        .opening-topbar { min-height: 66px; }
-        .opening-layout { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 28px 0 32px; }
-        .opening-copy { text-align: center; }
-        .opening-copy p { margin-right: auto; margin-left: auto; }
-        .opening-art { min-height: 260px; }
-        .opening-map { width: min(82vw, 330px); min-height: 250px; }
-        .opening-footer { flex-wrap: wrap; }
+        .opening-topbar { min-height: 70px; }
         .intro { min-height: 0; padding: 32px 24px; border-radius: 22px; }
         .intro::after { top: -170px; right: -180px; }
         .hero-layout { grid-template-columns: minmax(0, 1fr); gap: 22px; }
@@ -479,17 +570,6 @@
         .navbar { min-height: 60px; padding: 0 18px; justify-content: space-between; }
         .site-name { margin: 0; }
         .nav-links, .navbar > .button { display: none; }
-        .drawer-toggle {
-          position: absolute;
-          display: block;
-          width: 1px;
-          height: 1px;
-          margin: -1px;
-          overflow: hidden;
-          clip: rect(0, 0, 0, 0);
-          white-space: nowrap;
-          opacity: 0;
-        }
         .menu-button {
           width: 40px;
           height: 40px;
@@ -500,44 +580,29 @@
           gap: 5px;
           cursor: pointer;
         }
-        .drawer-backdrop {
-          position: fixed;
-          inset: 60px 0 0;
-          z-index: 8;
-          display: block;
-          background: #0006;
-          opacity: 0;
-          visibility: hidden;
-          transition: opacity .2s ease, visibility 0s linear .2s;
-        }
         .mobile-drawer {
-          position: fixed;
-          top: 60px;
-          right: 0;
-          bottom: 0;
-          z-index: 9;
           width: min(320px, 88vw);
+          max-width: none;
+          height: 100dvh;
+          max-height: none;
+          margin: 0 0 0 auto;
           padding: 20px;
+          inset: 0 0 0 auto;
+          border: 0;
+          border-left: 1px solid var(--border-color);
+          background: var(--surface-color);
+          color: var(--text-color);
+          overflow-y: auto;
+          overscroll-behavior: contain;
+        }
+        .mobile-drawer[open] {
           display: flex;
           flex-direction: column;
           gap: 4px;
-          overflow-y: auto;
-          background: var(--surface-color);
-          clip-path: inset(0 0 0 100%);
-          visibility: hidden;
-          overscroll-behavior: contain;
-          transition: clip-path .2s ease, visibility 0s linear .2s;
+          animation: drawer-in .22s ease-out both;
         }
-        .drawer-toggle:checked ~ .drawer-backdrop {
-          opacity: 1;
-          visibility: visible;
-          transition-delay: 0s;
-        }
-        .drawer-toggle:checked ~ .mobile-drawer {
-          clip-path: inset(0);
-          visibility: visible;
-          transition-delay: 0s;
-        }
+        .mobile-drawer::backdrop { background: #10201966; backdrop-filter: blur(2px); }
+        .drawer-close { align-self: flex-end; width: 40px; height: 40px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--surface-color); }
         .mobile-drawer > a, .mobile-drawer summary { padding: 12px 4px; border-bottom: 1px solid var(--border-color); }
         .mobile-drawer .dropdown-menu { position: static; width: auto; padding: 0 0 0 14px; border: 0; border-radius: 0; box-shadow: none; transform: none; }
         .mobile-drawer .mega-menu > ul { grid-template-columns: minmax(0, 1fr); gap: 10px; }
@@ -550,9 +615,17 @@
         }
         .content-grid { grid-template-columns: minmax(0, 1fr); }
         .component-list { min-width: 0; }
+        .link-category ul { grid-template-columns: 1fr; }
         .sidebar { display: flex; flex-wrap: wrap; gap: 4px; }
         .sidebar h2 { width: 100%; }
         .sample-navbar { gap: 12px; }
+      }
+
+      @media (max-width: 420px) {
+        .opening-note { max-width: 130px; text-align: right; }
+        .opening-layout { padding-top: 26px; }
+        .opening-copy h1 { font-size: clamp(42px, 13vw, 56px); }
+        .opening-art { min-height: 270px; }
       }
 
       @media (min-width: 681px) and (max-width: 820px) {
@@ -560,6 +633,58 @@
         .nav-links { gap: 2px; }
         .nav-links > a, .nav-dropdown > summary { padding: 8px 4px; font-size: 14px; }
         .button { padding: 8px 10px; font-size: 14px; }
+      }
+
+      @container components (max-width: 680px) {
+        .menu-visuals { grid-template-columns: minmax(0, 1fr); }
+        .feature-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+        .tab-detail-grid { grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); }
+        .link-directory { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+        .link-category { grid-column: 1 / -1; }
+      }
+
+      @container components (max-width: 430px) {
+        .panel { padding: 14px; }
+        .tab-labels { grid-template-columns: repeat(3, minmax(74px, 1fr)); }
+        .tab-detail-grid { grid-template-columns: 1fr; }
+        .rating-options { grid-template-columns: repeat(5, minmax(54px, 1fr)); overflow-x: auto; }
+        .link-directory { grid-template-columns: minmax(0, 1fr); }
+        .link-category ul { grid-template-columns: minmax(0, 1fr); }
+        .discovery-grid { grid-template-columns: minmax(0, 1fr); }
+      }
+
+      @container directory (max-width: 520px) {
+        .discovery-grid { grid-template-columns: 1fr; }
+        .discovery-card { display: grid; grid-template-columns: 132px minmax(0, 1fr); align-items: stretch; }
+        .discovery-card svg { height: 100%; min-height: 78px; }
+      }
+
+      @keyframes drawer-in {
+        from { transform: translateX(100%); }
+        to { transform: translateX(0); }
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --text-color: #eff1e8;
+          --muted-color: #bac3b3;
+          --border-color: #536151;
+          --page-color: #17251f;
+          --surface-color: #22362c;
+          --hover-color: #354a3d;
+          --glass: rgba(34,54,44,.78);
+          --glass-strong: rgba(37,59,48,.94);
+          --shadow: 0 18px 50px rgba(0,0,0,.24);
+        }
+      }
+
+      @media (forced-colors: active) {
+        :where(a, button, input, summary):focus-visible {
+          outline: 3px solid Highlight;
+        }
+        .nav-popover-trigger[aria-expanded="true"],
+        [aria-current="page"] { outline: 2px solid Highlight; }
+        .tab-labels a::after { background: Highlight; }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -582,25 +707,25 @@
         <span class="opening-mark" aria-hidden="true">✦</span>
         <span>Wayfinder</span>
       </a>
-      <span class="opening-note">A brighter way to find your way</span>
+      <span class="opening-note">A brighter way to build what’s next</span>
     </header>
     <div class="opening-layout">
       <div class="opening-copy">
-        <span class="opening-eyebrow">✦ Your web journey starts here</span>
-        <h1 id="opening-title">Find your next way.</h1>
-        <p>Welcome to Wayfinder—a friendly launch point for websites, useful pages, and places worth exploring.</p>
-        <button class="locate-link" type="button" aria-controls="site-home">
+        <span class="opening-eyebrow"><span aria-hidden="true">✦</span> A starting point for founders</span>
+        <h1 id="opening-title">Find your next big idea.</h1>
+        <p>Explore useful places across the web to validate a need, collect inspiration, and turn your curiosity into a first step.</p>
+        <a class="locate-link" href="#site-home" aria-label="Open the full Wayfinder website">
           <span class="locate-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
               <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
               <circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/>
             </svg>
           </span>
-          <span>Open the full site <span aria-hidden="true">→</span></span>
-        </button>
-        <span class="opening-hint">Follow the location pin to explore the whole website.</span>
+          <span>Open Wayfinder <span aria-hidden="true">→</span></span>
+        </a>
+        <span class="opening-hint">Open the founder toolkit and choose a path to explore.</span>
       </div>
-      <div class="opening-art" role="img" aria-label="Decorative map illustration with a dotted route and location pin">
+      <div class="opening-art" role="img" aria-label="Decorative illustrated map with a dotted route and location pin">
         <div class="opening-map" aria-hidden="true">
           <span class="opening-map-label">A new path is waiting</span>
           <svg class="opening-route" viewBox="0 0 300 260" fill="none" aria-hidden="true">
@@ -608,144 +733,137 @@
             <circle cx="20" cy="214" r="8" fill="#e8c66c" stroke="white" stroke-width="4"/>
           </svg>
           <span class="opening-pin"><span>✦</span></span>
+          <span class="opening-map-note">You are here</span>
         </div>
       </div>
     </div>
     <footer class="opening-footer">
       <span><strong>Wayfinder</strong> · Follow your curiosity.</span>
-      <span>Designed to guide, built to explore.</span>
+      <span>Discover thoughtfully. Build at your own pace.</span>
     </footer>
   </section>
   <header class="navbar" id="site-home" tabindex="-1">
     <a class="site-name" href="#main">Wayfinder</a>
-    <input class="drawer-toggle" type="checkbox" id="drawer-toggle" aria-label="Toggle navigation menu" aria-controls="mobile-nav">
-    <label class="menu-button" for="drawer-toggle" aria-label="Open navigation menu"><span></span><span></span><span></span></label>
+    <button class="menu-button" type="button" aria-label="Open navigation menu" aria-controls="mobile-nav" aria-haspopup="dialog">
+      <span></span><span></span><span></span>
+    </button>
 
     <nav class="nav-links" id="primary-nav" aria-label="Main navigation">
       <a href="#main">Home</a>
-      <details class="nav-dropdown">
-        <summary>Products</summary>
-        <div class="dropdown-menu">
+      <div class="nav-dropdown">
+        <button class="nav-popover-trigger" type="button" popovertarget="nav-products" aria-expanded="false" aria-haspopup="true">Explore</button>
+        <div class="dropdown-menu nav-popover" id="nav-products" popover>
           <ul>
             <li class="menu-group">
-              <h3>Navigation</h3>
+              <h3>Explore the journey</h3>
               <ul>
-                <li><a href="#menus">Menus</a></li>
-                <li><a href="#tabs">Tabs</a></li>
-                <li><a href="#breadcrumbs">Breadcrumbs</a></li>
+                <li><a href="#idea-discovery">Find and validate ideas</a></li>
+                <li><a href="#brand-design">Design your brand</a></li>
+                <li><a href="#build-launch">Build and launch</a></li>
               </ul>
             </li>
             <li class="menu-group">
-              <h3>Site pages</h3>
+              <h3>Founder resources</h3>
               <ul>
-                <li><a href="#websites">Websites</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#reviews">Reviews</a></li>
-                <li><a href="#schema">Menu schema</a></li>
-                <li><a href="#contacts">Contacts</a></li>
+                <li><a href="#education-links">Learn new skills</a></li>
+                <li><a href="#ai-links">Explore AI tools</a></li>
+                <li><a href="#shopping-links">Browse marketplaces</a></li>
               </ul>
             </li>
           </ul>
         </div>
-      </details>
-      <details class="nav-dropdown">
-        <summary>More</summary>
-        <div class="dropdown-menu mega-menu">
-          <h2>Explore every section</h2>
+      </div>
+      <div class="nav-dropdown">
+        <button class="nav-popover-trigger" type="button" popovertarget="nav-more" aria-expanded="false" aria-haspopup="true">Founder toolkit</button>
+        <div class="dropdown-menu mega-menu nav-popover" id="nav-more" popover>
+          <h2>From first spark to first launch</h2>
           <ul>
             <li class="menu-group">
-              <h3>Components</h3>
+              <h3>Discover an opportunity</h3>
               <ul>
-                <li><a href="#menus">Dropdown and mega menu</a></li>
-                <li><a href="#tabs">Tabs</a></li>
-                <li><a href="#breadcrumbs">Breadcrumbs</a></li>
-                <li><a href="#schema">Menu schema</a></li>
+                <li><a href="#idea-discovery">Find and validate ideas</a></li>
+                <li><a href="#reference-links">Learn from useful content</a></li>
+                <li><a href="#education-links">Build your skills</a></li>
               </ul>
             </li>
             <li class="menu-group">
-              <h3>Website directory</h3>
+              <h3>Create your first version</h3>
               <ul>
-                <li><a href="#websites">All websites</a></li>
-                <li><a href="#reference-links">Reference &amp; video</a></li>
-                <li><a href="#shopping-links">Shopping</a></li>
-                <li><a href="#browser-links">Browsers</a></li>
-                <li><a href="#ai-links">AI tools</a></li>
+                <li><a href="#brand-design">Design and brand</a></li>
+                <li><a href="#build-launch">Build and launch</a></li>
+                <li><a href="#ai-links">Use AI to explore and create</a></li>
               </ul>
             </li>
             <li class="menu-group">
-              <h3>About Wayfinder</h3>
+              <h3>Keep moving forward</h3>
               <ul>
-                <li><a href="#about">Features and About</a></li>
-                <li><a href="#reviews">Reviews and ratings</a></li>
-                <li><a href="#contacts">Contacts</a></li>
+                <li><a href="#shopping-links">Explore commerce platforms</a></li>
+                <li><a href="#about">About Wayfinder</a></li>
+                <li><a href="#contacts">Contact the Wayfinder team</a></li>
               </ul>
             </li>
           </ul>
         </div>
-      </details>
+      </div>
       <a href="#websites">Websites</a>
       <a href="#contacts">Contact</a>
     </nav>
-    <a class="button" href="#menus">Get started</a>
+    <a class="button" href="#idea-discovery">Get started</a>
 
-    <label class="drawer-backdrop" for="drawer-toggle" aria-label="Close navigation menu"></label>
-    <nav class="mobile-drawer" id="mobile-nav" aria-label="Mobile navigation">
+    <dialog class="mobile-drawer" id="mobile-nav" aria-label="Mobile navigation">
+      <button class="drawer-close" type="button" aria-label="Close navigation menu">✕</button>
+      <nav id="mobile-nav-links" aria-label="Mobile navigation">
       <a href="#main">Home</a>
       <details class="nav-dropdown">
-        <summary>Products</summary>
+        <summary>Explore</summary>
         <div class="dropdown-menu">
           <ul>
             <li class="menu-group">
-              <h3>Navigation</h3>
+              <h3>Explore the journey</h3>
               <ul>
-                <li><a href="#menus">Menus</a></li>
-                <li><a href="#tabs">Tabs</a></li>
-                <li><a href="#breadcrumbs">Breadcrumbs</a></li>
+                <li><a href="#idea-discovery">Find and validate ideas</a></li>
+                <li><a href="#brand-design">Design your brand</a></li>
+                <li><a href="#build-launch">Build and launch</a></li>
               </ul>
             </li>
             <li class="menu-group">
-              <h3>Site pages</h3>
+              <h3>Founder resources</h3>
               <ul>
-                <li><a href="#websites">Websites</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#reviews">Reviews</a></li>
-                <li><a href="#schema">Menu schema</a></li>
-                <li><a href="#contacts">Contacts</a></li>
+                <li><a href="#education-links">Learn new skills</a></li>
+                <li><a href="#ai-links">Explore AI tools</a></li>
+                <li><a href="#shopping-links">Browse marketplaces</a></li>
               </ul>
             </li>
           </ul>
         </div>
       </details>
       <details class="nav-dropdown">
-        <summary>More</summary>
+        <summary>Founder toolkit</summary>
         <div class="dropdown-menu mega-menu">
-          <h2>Explore every section</h2>
+          <h2>From first spark to first launch</h2>
           <ul>
             <li class="menu-group">
-              <h3>Components</h3>
+              <h3>Discover an opportunity</h3>
               <ul>
-                <li><a href="#menus">Dropdown and mega menu</a></li>
-                <li><a href="#tabs">Tabs</a></li>
-                <li><a href="#breadcrumbs">Breadcrumbs</a></li>
-                <li><a href="#schema">Menu schema</a></li>
+                <li><a href="#idea-discovery">Find and validate ideas</a></li>
+                <li><a href="#reference-links">Learn from useful content</a></li>
+                <li><a href="#education-links">Build your skills</a></li>
               </ul>
             </li>
             <li class="menu-group">
-              <h3>Website directory</h3>
+              <h3>Create your first version</h3>
               <ul>
-                <li><a href="#websites">All websites</a></li>
-                <li><a href="#reference-links">Reference &amp; video</a></li>
-                <li><a href="#shopping-links">Shopping</a></li>
-                <li><a href="#browser-links">Browsers</a></li>
-                <li><a href="#ai-links">AI tools</a></li>
+                <li><a href="#brand-design">Design and brand</a></li>
+                <li><a href="#build-launch">Build and launch</a></li>
+                <li><a href="#ai-links">Use AI to explore and create</a></li>
               </ul>
             </li>
             <li class="menu-group">
-              <h3>About Wayfinder</h3>
+              <h3>Keep moving forward</h3>
               <ul>
-                <li><a href="#about">Features and About</a></li>
-                <li><a href="#reviews">Reviews and ratings</a></li>
-                <li><a href="#contacts">Contacts</a></li>
+                <li><a href="#shopping-links">Explore commerce platforms</a></li>
+                <li><a href="#about">About Wayfinder</a></li>
+                <li><a href="#contacts">Contact the Wayfinder team</a></li>
               </ul>
             </li>
           </ul>
@@ -754,17 +872,18 @@
       <a href="#websites">Websites</a>
       <a href="#contacts">Contact</a>
       <a href="#about">About</a>
-    </nav>
+      </nav>
+    </dialog>
   </header>
 
   <main id="main">
     <section class="intro" aria-labelledby="page-title">
       <div class="hero-layout">
         <div class="hero-copy">
-          <span class="eyebrow">Welcome to Wayfinder</span>
-          <h1 id="page-title">Your next destination is just a click away.</h1>
-          <p>One friendly starting point for exploring useful websites, finding page sections, and getting where you want to go.</p>
-          <a class="hero-link" href="#websites">Explore websites <span aria-hidden="true">&nbsp;→</span></a>
+          <span class="eyebrow">A founder’s field guide to the web</span>
+          <h1 id="page-title">Find your next big idea.</h1>
+          <p>A nature-inspired launchpad for curious founders: uncover opportunities, collect inspiration, design your brand, and build your first version.</p>
+          <a class="hero-link" href="#websites">Explore the founder toolkit <span aria-hidden="true">&nbsp;→</span></a>
         </div>
         <div class="welcome-art" role="img" aria-label="Illustration of a map with a dotted route leading to a destination pin">
           <div class="route-card" aria-hidden="true">
@@ -782,33 +901,33 @@
     </section>
 
     <div class="content-grid">
-      <aside class="sidebar" aria-label="Component navigation">
-        <h2>Sections</h2>
-        <nav class="sidebar-links" id="sidebar-links" aria-label="Component sections">
-          <a href="#menus">Menus</a><a href="#tabs">Tabs</a>
-          <a href="#breadcrumbs">Breadcrumbs</a><a href="#schema">Data</a>
-          <a href="#websites">Websites</a><a href="#reviews">Reviews</a>
-          <a href="#contacts">Contacts</a>
+      <aside class="sidebar" aria-label="Founder resource navigation">
+        <h2>Your journey</h2>
+        <nav class="sidebar-links" id="sidebar-links" aria-label="Founder resources">
+          <a href="#idea-discovery">Find ideas</a><a href="#brand-design">Design</a>
+          <a href="#build-launch">Launch</a><a href="#education-links">Learn</a>
+          <a href="#websites">All resources</a><a href="#about">About</a>
+          <a href="#reviews">Feedback</a>
         </nav>
       </aside>
 
-      <article class="component-list" aria-label="Navigation components">
+      <article class="component-list" aria-label="Founder resources and navigation">
         <section class="panel" id="menus" aria-labelledby="menus-title">
-          <h2 id="menus-title">Dropdown and mega menu</h2>
+          <h2 id="menus-title">A clear path through the founder journey</h2>
           <nav class="sample-navbar" aria-label="Example navigation">
-            <strong>Example site</strong><a href="#main">Home</a>
+            <strong>FOUNDER FIELD GUIDE</strong><a href="#idea-discovery">Ideas</a>
             <details class="sample-dropdown">
-              <summary>Services</summary>
-              <div class="dropdown-menu"><a href="#menus">Consulting</a><a href="#menus">Design</a><a href="#menus">Support</a></div>
+              <summary>Next steps</summary>
+              <div class="dropdown-menu"><a href="#idea-discovery">Validate a need</a><a href="#brand-design">Shape your brand</a><a href="#build-launch">Build a first version</a></div>
             </details>
-            <a href="#breadcrumbs">About</a>
+            <a href="#education-links">Learn</a>
           </nav>
-          <p>A dropdown keeps a short list close to its label. A mega menu opens a wider, grouped panel for a larger site. Explore both visual examples with hover, keyboard focus, or click.</p>
+          <p>Wayfinder organizes useful links around the steps new founders often take. Use a short dropdown for immediate next steps, or open the founder toolkit for a broader view of research, design, learning, and launch resources.</p>
           <div class="menu-visuals">
             <article class="menu-visual-card" aria-labelledby="dropdown-visual-title">
               <div class="menu-visual-heading">
                 <span class="menu-visual-icon" aria-hidden="true">⌄</span>
-                <div><h3 id="dropdown-visual-title">Dropdown menu</h3><p>Quick links, kept simple</p></div>
+                <div><h3 id="dropdown-visual-title">Next-step dropdown</h3><p>Keep the next move close</p></div>
               </div>
               <div class="visual-browser">
                 <div class="visual-browser-chrome" aria-hidden="true"><i></i><i></i><i></i><span>wayfinder.studio</span><span>✦</span></div>
@@ -818,18 +937,18 @@
                   <details>
                     <summary>Explore</summary>
                     <div class="visual-dropdown-menu">
-                      <a href="#websites">Places to explore <span>↗</span></a>
-                      <a href="#reference-links">Ideas and guides <span>↗</span></a>
-                      <a href="#about">Our story <span>↗</span></a>
+                      <a href="#idea-discovery">Test a problem <span>↗</span></a>
+                      <a href="#brand-design">Shape a brand <span>↗</span></a>
+                      <a href="#build-launch">Make a first version <span>↗</span></a>
                     </div>
                   </details>
                   <a href="#contacts">Visit</a>
                 </nav>
                 <div class="visual-stage">
                   <div>
-                    <p class="visual-kicker">QUICK ROUTES</p>
-                    <h4>Pick a direction.</h4>
-                    <p class="visual-stage-copy">A tidy menu makes the next step easy to find.</p>
+                    <p class="visual-kicker">START SMALL</p>
+                    <h4>Choose one next step.</h4>
+                    <p class="visual-stage-copy">A focused dropdown helps you move from an idea to action.</p>
                   </div>
                   <svg class="mini-route-art" viewBox="0 0 120 110" role="img" aria-label="Illustrated dotted route leading to a destination pin">
                     <path d="M12 82C35 82 27 35 58 48S79 82 105 27" fill="none" stroke="#718568" stroke-width="4" stroke-linecap="round" class="map-path"/>
@@ -838,13 +957,13 @@
                   </svg>
                 </div>
               </div>
-              <p class="menu-visual-caption">Best for a small, focused set of choices such as Services, Account, or Help.</p>
+              <p class="menu-visual-caption">Use a dropdown for a few clear actions: research a need, design a brand, or try a first launch.</p>
             </article>
 
             <article class="menu-visual-card" aria-labelledby="mega-visual-title">
               <div class="menu-visual-heading">
                 <span class="menu-visual-icon" aria-hidden="true">✦</span>
-                <div><h3 id="mega-visual-title">Mega menu</h3><p>Room for a richer journey</p></div>
+                <div><h3 id="mega-visual-title">Founder toolkit</h3><p>One map for the bigger picture</p></div>
               </div>
               <div class="visual-browser">
                 <div class="visual-browser-chrome" aria-hidden="true"><i></i><i></i><i></i><span>wayfinder.studio</span><span>✦</span></div>
@@ -855,11 +974,11 @@
                     <summary>Discover</summary>
                     <div class="visual-mega-panel">
                       <div class="visual-mega-links">
-                        <h4>Explore by interest</h4>
-                        <a href="#reference-links">Learning and ideas</a>
-                        <a href="#shopping-links">Find something special</a>
-                        <a href="#browser-links">Tools for the journey</a>
-                        <a href="#ai-links">Create and discover</a>
+                        <h4>Explore by founder goal</h4>
+                        <a href="#idea-discovery">Research an opportunity</a>
+                        <a href="#brand-design">Create a visual identity</a>
+                        <a href="#build-launch">Build and launch</a>
+                        <a href="#education-links">Learn as you go</a>
                       </div>
                       <a class="visual-mega-feature" href="#websites" aria-label="Featured destination: Your next great find">
                         <div class="visual-feature-art" aria-hidden="true">
@@ -872,9 +991,9 @@
                             <path d="m31 16 3 6 6 1-5 4 1 6-5-3-5 3 1-6-5-4 6-1 3-6Z" fill="#f3d982"/>
                           </svg>
                         </div>
-                        <p class="visual-feature-label">FEATURED DESTINATION</p>
-                        <h4>Your next great find</h4>
-                        <p>A little inspiration for wherever you’re headed.</p>
+                        <p class="visual-feature-label">FOUNDER FIELD NOTE</p>
+                        <h4>Start with a real need</h4>
+                        <p>Listen first, then explore a small solution.</p>
                       </a>
                     </div>
                   </details>
@@ -882,9 +1001,9 @@
                 </nav>
                 <div class="visual-stage">
                   <div>
-                    <p class="visual-kicker">MORE TO DISCOVER</p>
-                    <h4>All your paths, together.</h4>
-                    <p class="visual-stage-copy">Clear groups and a featured story help visitors browse.</p>
+                    <p class="visual-kicker">IDEA TO ACTION</p>
+                    <h4>Find your next move.</h4>
+                    <p class="visual-stage-copy">Grouped resources make the founder journey easier to navigate.</p>
                   </div>
                   <svg class="mini-route-art" viewBox="0 0 120 110" role="img" aria-label="Decorative map illustration with winding route">
                     <path d="M11 89c28 0 10-42 40-42s17 30 40 14 13-38 27-38" fill="none" stroke="#718568" stroke-width="4" stroke-linecap="round" class="map-path"/>
@@ -893,153 +1012,215 @@
                   </svg>
                 </div>
               </div>
-              <p class="menu-visual-caption">Best for many categories, helpful sub-links, and a featured destination—all in one glance.</p>
+              <p class="menu-visual-caption">A mega menu brings idea research, creative tools, learning, and launch resources together in one overview.</p>
             </article>
           </div>
         </section>
 
         <section class="panel" id="tabs" aria-labelledby="tabs-title">
-          <h2 id="tabs-title">Tabs</h2>
-          <fieldset class="tabs">
-            <legend class="visually-hidden">Example views</legend>
-            <input type="radio" name="tabs" id="tab-overview" aria-controls="tab-overview-panel" checked>
-            <input type="radio" name="tabs" id="tab-activity" aria-controls="tab-activity-panel">
-            <input type="radio" name="tabs" id="tab-settings" aria-controls="tab-settings-panel">
-            <div class="tab-labels">
-              <label for="tab-overview">Overview</label>
-              <label for="tab-activity">Activity</label>
-              <label for="tab-settings">Settings</label>
-            </div>
-            <section class="tab-content tab-overview" id="tab-overview-panel" aria-labelledby="tab-overview">
-              <h3>One place to find your way</h3>
-              <p>Wayfinder brings clear page navigation and useful web destinations together in a welcoming, responsive layout.</p>
+          <h2 id="tabs-title">Explore the founder journey</h2>
+          <div class="tabs">
+            <nav class="tab-labels" role="tablist" aria-label="Founder journey stages">
+              <a role="tab" href="#tab-overview-panel" aria-controls="tab-overview-panel" aria-selected="true">Discover</a>
+              <a role="tab" href="#tab-activity-panel" aria-controls="tab-activity-panel" aria-selected="false">Plan</a>
+              <a role="tab" href="#tab-settings-panel" aria-controls="tab-settings-panel" aria-selected="false">Build</a>
+            </nav>
+            <div class="tab-viewport">
+            <section class="tab-content tab-overview" id="tab-overview-panel" role="tabpanel" aria-label="Overview">
+              <h3>Start with curiosity</h3>
+              <p>Good ideas often begin by noticing a need. Use Wayfinder to explore what people care about, gather references, and learn what is already out there.</p>
               <div class="tab-detail-grid">
-                <article class="tab-detail"><span>01 · Navigate</span><strong>Find a section</strong><p>Use breadcrumbs, dropdowns, and the mega menu to move around.</p></article>
-                <article class="tab-detail"><span>02 · Explore</span><strong>Discover websites</strong><p>Browse a curated directory of useful online destinations.</p></article>
-                <article class="tab-detail"><span>03 · Share</span><strong>Leave a review</strong><p>Choose an emoji rating and save feedback in this browser.</p></article>
+                <article class="tab-detail"><span>01 · Notice</span><strong>Look for a real need</strong><p>Listen to questions, frustrations, and workarounds in communities.</p></article>
+                <article class="tab-detail"><span>02 · Explore</span><strong>Follow useful signals</strong><p>Compare trends, products, and conversations before choosing a direction.</p></article>
+                <article class="tab-detail"><span>03 · Collect</span><strong>Save inspiration</strong><p>Gather references that help you explain the idea and who it serves.</p></article>
               </div>
             </section>
-            <section class="tab-content tab-activity" id="tab-activity-panel" aria-labelledby="tab-activity">
-              <h3>Take a quick tour</h3>
-              <p>Here are a few ways to get started with the site.</p>
+            <section class="tab-content tab-activity" id="tab-activity-panel" role="tabpanel" aria-label="Plan">
+              <h3>Turn a hunch into a plan</h3>
+              <p>Before investing heavily, make your assumptions clear and look for ways to test them.</p>
               <ol class="activity-list">
-                <li><span class="activity-marker" aria-hidden="true">1</span><div><strong>Open the navigation</strong><p>Choose a category from Products or explore the multi-column More menu.</p></div></li>
-                <li><span class="activity-marker" aria-hidden="true">2</span><div><strong>Follow a breadcrumb</strong><p>Use the linked parent levels to jump back through the page structure.</p></div></li>
-                <li><span class="activity-marker" aria-hidden="true">3</span><div><strong>Rate your visit</strong><p>Head to Reviews and pick the emoji that matches your experience.</p></div></li>
+                <li><span class="activity-marker" aria-hidden="true">1</span><div><strong>Name the audience</strong><p>Be specific about who experiences the problem and in what situation.</p></div></li>
+                <li><span class="activity-marker" aria-hidden="true">2</span><div><strong>Ask and observe</strong><p>Talk to potential customers and learn how they solve it today.</p></div></li>
+                <li><span class="activity-marker" aria-hidden="true">3</span><div><strong>Check your assumptions</strong><p>Use research tools and small experiments to decide what to test next.</p></div></li>
               </ol>
             </section>
-            <section class="tab-content tab-settings" id="tab-settings-panel" aria-labelledby="tab-settings">
-              <h3>Current site preferences</h3>
-              <p>Wayfinder keeps these defaults simple and accessible.</p>
+            <section class="tab-content tab-settings" id="tab-settings-panel" role="tabpanel" aria-label="Build">
+              <h3>Make a small first version</h3>
+              <p>You do not need everything figured out to begin. Build the smallest useful version, share it, and learn from what happens.</p>
               <div class="tab-detail-grid">
-                <article class="tab-detail"><span>Appearance</span><strong>Forest, ivory, and gold</strong><p>A warm palette with clear contrast and gentle accents.</p></article>
-                <article class="tab-detail"><span>Motion</span><strong>Reduced-motion aware</strong><p>Animations adapt to your device’s accessibility preference.</p></article>
-                <article class="tab-detail"><span>Privacy</span><strong>Local reviews</strong><p>Ratings and review notes stay in this browser.</p></article>
+                <article class="tab-detail"><span>01 · Brand</span><strong>Make it recognizable</strong><p>Use design tools to express the value and personality of your idea.</p></article>
+                <article class="tab-detail"><span>02 · Build</span><strong>Keep the scope small</strong><p>Start with one clear use case and a simple way to deliver it.</p></article>
+                <article class="tab-detail"><span>03 · Learn</span><strong>Improve with feedback</strong><p>Share early, notice what helps, and iterate with care.</p></article>
               </div>
             </section>
-          </fieldset>
+            </div>
+          </div>
         </section>
 
         <section class="panel" id="breadcrumbs" aria-labelledby="breadcrumb-title">
-          <h2 id="breadcrumb-title">Breadcrumbs</h2>
-          <nav class="breadcrumbs" aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+          <h2 id="breadcrumb-title">A simple path from idea to action</h2>
+          <nav class="breadcrumbs" aria-label="Example founder journey path" itemscope itemtype="https://schema.org/BreadcrumbList">
             <ol class="breadcrumb-trail">
               <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <a itemprop="item" href="#main"><span itemprop="name">Home</span></a>
+                <a itemprop="item" href="#main"><span itemprop="name">Wayfinder</span></a>
                 <meta itemprop="position" content="1">
               </li>
               <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <a itemprop="item" href="#menus"><span itemprop="name">Components</span></a>
+                <a itemprop="item" href="#idea-discovery"><span itemprop="name">Founder journey</span></a>
                 <meta itemprop="position" content="2">
               </li>
               <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <span itemprop="name" aria-current="page">Breadcrumbs</span>
+                <span itemprop="name" aria-current="page">Find an opportunity</span>
                 <meta itemprop="position" content="3">
               </li>
             </ol>
             <details class="breadcrumb-dropdown breadcrumb-jump">
               <summary>Jump to section</summary>
               <div class="breadcrumb-menu">
-                <a href="#menus">Menus</a>
-                <a href="#tabs">Tabs</a>
-                <a href="#breadcrumbs" aria-current="page">Breadcrumbs</a>
-                <a href="#websites">Websites</a>
-                <a href="#reference-links">Reference &amp; video</a>
-                <a href="#shopping-links">Shopping</a>
-                <a href="#browser-links">Browsers</a>
-                <a href="#ai-links">AI tools</a>
-                <a href="#about">About</a>
-                <a href="#reviews">Reviews</a>
-                <a href="#schema">Menu schema</a>
-                <a href="#contacts">Contacts</a>
+                <a href="#idea-discovery">Find and validate ideas</a>
+                <a href="#brand-design">Design and brand</a>
+                <a href="#build-launch">Build and launch</a>
+                <a href="#education-links">Learn new skills</a>
+                <a href="#ai-links">Explore AI tools</a>
+                <a href="#shopping-links">Explore marketplaces</a>
+                <a href="#websites">All resources</a>
+                <a href="#about">About Wayfinder</a>
+                <a href="#reviews">Share feedback</a>
+                <a href="#contacts">Contact the team</a>
               </div>
             </details>
           </nav>
-          <p>Home and Components are clickable parent levels; the current location is clearly marked and the trail is exposed as a Schema.org breadcrumb list.</p>
+          <p>Think of a business idea as a path, not a leap. Begin with a need, explore the landscape, then choose one useful next step. This sample trail shows how Wayfinder groups its resources into a journey.</p>
         </section>
 
         <section class="panel" id="websites" aria-labelledby="websites-title">
-          <h2 id="websites-title">Useful websites</h2>
-          <p>Quick links to reference, shopping, browser, and AI services.</p>
+          <h2 id="websites-title">Your entrepreneur idea launchpad</h2>
+          <p>Explore trends, collect inspiration, shape a brand, and find practical tools to take your next idea forward.</p>
+          <div class="discovery-grid" aria-label="Fresh ways to explore the web">
+            <a class="discovery-card discovery-learn" href="#idea-discovery">
+              <svg viewBox="0 0 220 110" aria-hidden="true"><defs><linearGradient id="learn-bg" x1="0" x2="1"><stop stop-color="#7f9a78"/><stop offset="1" stop-color="#d8bc70"/></linearGradient></defs><rect width="220" height="110" rx="16" fill="url(#learn-bg)"/><circle cx="172" cy="32" r="22" fill="#fff8e8" opacity=".85"/><path d="M24 82c30-22 50-21 78-7s50 8 94-23" fill="none" stroke="#fff9e8" stroke-width="5" stroke-linecap="round" stroke-dasharray="7 10"/><path d="m94 40 17 8-17 8Z" fill="#29483a"/></svg>
+              <span><small>SPOT AN OPPORTUNITY</small><strong>Find an idea worth exploring</strong></span>
+            </a>
+            <a class="discovery-card discovery-create" href="#brand-design">
+              <svg viewBox="0 0 220 110" aria-hidden="true"><defs><linearGradient id="create-bg" x1="0" x2="1"><stop stop-color="#29483a"/><stop offset="1" stop-color="#b86f3e"/></linearGradient></defs><rect width="220" height="110" rx="16" fill="url(#create-bg)"/><g fill="#f5d990"><path d="m66 18 5 11 12 2-9 8 2 12-10-6-10 6 2-12-9-8 12-2Z"/><path d="m153 29 4 8 9 2-7 6 2 9-8-5-8 5 2-9-7-6 9-2Z"/></g><path d="M40 88c24-32 54-28 74-8s42 13 66-18" fill="none" stroke="#fffaf0" stroke-width="4" stroke-linecap="round" stroke-dasharray="4 8"/></svg>
+              <span><small>BUILD YOUR BRAND</small><strong>Turn inspiration into a look</strong></span>
+            </a>
+            <a class="discovery-card discovery-find" href="#build-launch">
+              <svg viewBox="0 0 220 110" aria-hidden="true"><defs><linearGradient id="find-bg" x1="0" x2="1"><stop stop-color="#f1dfad"/><stop offset="1" stop-color="#aebd9d"/></linearGradient></defs><rect width="220" height="110" rx="16" fill="url(#find-bg)"/><circle cx="164" cy="55" r="30" fill="#fffaf0" opacity=".65"/><path d="M164 27c-13 0-24 11-24 24 0 18 24 39 24 39s24-21 24-39c0-13-11-24-24-24Z" fill="#b86f3e"/><circle cx="164" cy="51" r="7" fill="#fffaf0"/></svg>
+              <span><small>MAKE IT REAL</small><strong>Launch your first version</strong></span>
+            </a>
+          </div>
+          <form class="portal-search" role="search" onsubmit="return false">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15.5 15.5 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <label class="visually-hidden" for="portal-search-input">Search websites or components</label>
+            <input id="portal-search-input" type="search" autocomplete="off" placeholder="Search websites or components...">
+            <kbd>⌘ K</kbd>
+          </form>
           <div class="link-directory">
+            <section class="link-category" id="idea-discovery" aria-labelledby="idea-discovery-title">
+              <h3 id="idea-discovery-title">Find and validate ideas</h3>
+              <ul>
+                <li data-search="pinterest inspiration visual ideas trends products"><a href="https://www.pinterest.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">P</span><span><strong>Pinterest</strong><small>Save ideas and spot visual trends</small></span></a></li>
+                <li data-search="product hunt new products startup ideas"><a href="https://www.producthunt.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">PH</span><span><strong>Product Hunt</strong><small>See what makers are launching</small></span></a></li>
+                <li data-search="google trends search demand market research"><a href="https://trends.google.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">G</span><span><strong>Google Trends</strong><small>Explore what people search for</small></span></a></li>
+                <li data-search="exploding topics trends market research opportunity"><a href="https://explodingtopics.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">ET</span><span><strong>Exploding Topics</strong><small>Find topics gaining momentum</small></span></a></li>
+                <li data-search="indie hackers founder startup community business ideas"><a href="https://www.indiehackers.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">IH</span><span><strong>Indie Hackers</strong><small>Learn from independent founders</small></span></a></li>
+                <li data-search="reddit communities customer problems research ideas"><a href="https://www.reddit.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">r/</span><span><strong>Reddit</strong><small>Listen to real community needs</small></span></a></li>
+              </ul>
+            </section>
+            <section class="link-category" id="brand-design" aria-labelledby="brand-design-title">
+              <h3 id="brand-design-title">Design and brand your idea</h3>
+              <ul>
+                <li data-search="canva design logo social media presentations"><a href="https://www.canva.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">C</span><span><strong>Canva</strong><small>Create logos, posts, and pitches</small></span></a></li>
+                <li data-search="figma design prototype product interface"><a href="https://www.figma.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">F</span><span><strong>Figma</strong><small>Sketch and prototype a product</small></span></a></li>
+                <li data-search="behance creative portfolio design inspiration"><a href="https://www.behance.net/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">Bē</span><span><strong>Behance</strong><small>Explore creative portfolios</small></span></a></li>
+                <li data-search="dribbble design inspiration interface"><a href="https://dribbble.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">D</span><span><strong>Dribbble</strong><small>Discover product and brand design</small></span></a></li>
+                <li data-search="unsplash photos images visual content"><a href="https://unsplash.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">U</span><span><strong>Unsplash</strong><small>Find photography for your story</small></span></a></li>
+              </ul>
+            </section>
+            <section class="link-category" id="build-launch" aria-labelledby="build-launch-title">
+              <h3 id="build-launch-title">Build and launch</h3>
+              <ul>
+                <li data-search="shopify ecommerce online store business"><a href="https://www.shopify.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">S</span><span><strong>Shopify</strong><small>Start an online storefront</small></span></a></li>
+                <li data-search="wordpress website publishing blog"><a href="https://wordpress.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">W</span><span><strong>WordPress.com</strong><small>Publish a site or a first blog</small></span></a></li>
+                <li data-search="notion planning workspace startup business"><a href="https://www.notion.so/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">N</span><span><strong>Notion</strong><small>Organize your launch plan</small></span></a></li>
+                <li data-search="stripe payments online business"><a href="https://stripe.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">S</span><span><strong>Stripe</strong><small>Explore online payments</small></span></a></li>
+                <li data-search="y combinator startup school founders learning"><a href="https://www.startupschool.org/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">YC</span><span><strong>Startup School</strong><small>Founder lessons and guidance</small></span></a></li>
+              </ul>
+            </section>
             <section class="link-category" id="reference-links" aria-labelledby="reference-links-title">
               <h3 id="reference-links-title">Reference &amp; video</h3>
               <ul>
-                <li><a href="https://www.wikipedia.org/" target="_blank" rel="noopener noreferrer">Wikipedia</a></li>
-                <li><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+                <li data-search="wikipedia reference knowledge encyclopedia"><a href="https://www.wikipedia.org/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">W</span><span><strong>Wikipedia</strong><small>The open world encyclopedia</small></span></a></li>
+                <li data-search="youtube video learning creative"><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">▶</span><span><strong>YouTube</strong><small>Videos, courses, and ideas</small></span></a></li>
               </ul>
             </section>
             <section class="link-category" id="shopping-links" aria-labelledby="shopping-links-title">
               <h3 id="shopping-links-title">Shopping apps</h3>
               <ul>
-                <li><a href="https://www.amazon.in/" target="_blank" rel="noopener noreferrer">Amazon India</a></li>
-                <li><a href="https://www.flipkart.com/" target="_blank" rel="noopener noreferrer">Flipkart</a></li>
-                <li><a href="https://www.myntra.com/" target="_blank" rel="noopener noreferrer">Myntra</a></li>
+                <li data-search="amazon india shopping books electronics"><a href="https://www.amazon.in/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">A</span><span><strong>Amazon India</strong><small>Browse products and books</small></span></a></li>
+                <li data-search="flipkart shopping electronics"><a href="https://www.flipkart.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">F</span><span><strong>Flipkart</strong><small>Explore deals and essentials</small></span></a></li>
+                <li data-search="myntra fashion clothing shopping"><a href="https://www.myntra.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">M</span><span><strong>Myntra</strong><small>Discover fashion and style</small></span></a></li>
+                <li data-search="meesho value shopping fashion home"><a href="https://www.meesho.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">M</span><span><strong>Meesho</strong><small>Value shopping for everyone</small></span></a></li>
+                <li data-search="ajio fashion clothing shopping"><a href="https://www.ajio.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">A</span><span><strong>AJIO</strong><small>Fashion, beauty, and lifestyle</small></span></a></li>
+                <li data-search="nykaa beauty cosmetics shopping"><a href="https://www.nykaa.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">N</span><span><strong>Nykaa</strong><small>Beauty and personal care</small></span></a></li>
               </ul>
             </section>
             <section class="link-category" id="browser-links" aria-labelledby="browser-links-title">
               <h3 id="browser-links-title">Browsers</h3>
               <ul>
-                <li><a href="https://www.google.com/chrome/" target="_blank" rel="noopener noreferrer">Google Chrome</a></li>
-                <li><a href="https://www.mozilla.org/firefox/" target="_blank" rel="noopener noreferrer">Mozilla Firefox</a></li>
-                <li><a href="https://www.microsoft.com/edge" target="_blank" rel="noopener noreferrer">Microsoft Edge</a></li>
+                <li data-search="google chrome browser"><a href="https://www.google.com/chrome/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">C</span><span><strong>Google Chrome</strong><small>Fast, familiar browsing</small></span></a></li>
+                <li data-search="mozilla firefox browser privacy"><a href="https://www.mozilla.org/firefox/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">F</span><span><strong>Mozilla Firefox</strong><small>Open web, privacy first</small></span></a></li>
+                <li data-search="microsoft edge browser"><a href="https://www.microsoft.com/edge" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">E</span><span><strong>Microsoft Edge</strong><small>Productive cross-device web</small></span></a></li>
+              </ul>
+            </section>
+            <section class="link-category" id="education-links" aria-labelledby="education-links-title">
+              <h3 id="education-links-title">Learning &amp; education</h3>
+              <ul>
+                <li data-search="khan academy education learning courses"><a href="https://www.khanacademy.org/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">K</span><span><strong>Khan Academy</strong><small>Free lessons for every learner</small></span></a></li>
+                <li data-search="coursera courses university education"><a href="https://www.coursera.org/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">C</span><span><strong>Coursera</strong><small>University courses and certificates</small></span></a></li>
+                <li data-search="edx courses university education"><a href="https://www.edx.org/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">X</span><span><strong>edX</strong><small>Learn from leading institutions</small></span></a></li>
+                <li data-search="unacademy education exam preparation"><a href="https://unacademy.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">U</span><span><strong>Unacademy</strong><small>Lessons and exam preparation</small></span></a></li>
+                <li data-search="geeksforgeeks coding programming computer science"><a href="https://www.geeksforgeeks.org/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">G</span><span><strong>GeeksforGeeks</strong><small>Coding and computer science</small></span></a></li>
               </ul>
             </section>
             <section class="link-category" id="ai-links" aria-labelledby="ai-links-title">
               <h3 id="ai-links-title">AI tools</h3>
               <ul>
-                <li><a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPT</a></li>
-                <li><a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer">Google Gemini</a></li>
-                <li><a href="https://copilot.microsoft.com/" target="_blank" rel="noopener noreferrer">Microsoft Copilot</a></li>
+                <li data-search="chatgpt ai assistant chat"><a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">✦</span><span><strong>ChatGPT</strong><small>Chat, create, and explore</small></span></a></li>
+                <li data-search="google gemini ai assistant"><a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">G</span><span><strong>Google Gemini</strong><small>Ideas connected to Google</small></span></a></li>
+                <li data-search="microsoft copilot ai assistant"><a href="https://copilot.microsoft.com/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">C</span><span><strong>Microsoft Copilot</strong><small>AI support across your day</small></span></a></li>
+                <li data-search="claude ai anthropic assistant writing analysis"><a href="https://claude.ai/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">C</span><span><strong>Claude</strong><small>Thoughtful writing and analysis</small></span></a></li>
+                <li data-search="perplexity ai search answers research"><a href="https://www.perplexity.ai/" target="_blank" rel="noopener noreferrer"><span class="link-icon" aria-hidden="true">P</span><span><strong>Perplexity</strong><small>Search with cited answers</small></span></a></li>
               </ul>
             </section>
           </div>
         </section>
 
         <section class="panel" id="about" aria-labelledby="about-title">
-          <h2 id="about-title">About</h2>
+          <h2 id="about-title">About Wayfinder</h2>
           <div class="about-overview">
-            <p>Wayfinder is a responsive, CSS-led navigation demo built to make moving around a website feel clear and welcoming. It works as a standalone page, and can optionally load menu data from an Express endpoint.</p>
+            <p>Wayfinder is a curated web navigation hub for people turning curiosity into a business. We bring idea research, creative inspiration, design tools, learning resources, and launch platforms together in one friendly place—so first-time entrepreneurs can spend less time searching and more time taking their next step.</p>
             <div class="feature-grid">
-              <article class="feature-card"><h3>Responsive menus</h3><p>Header dropdowns, a two-column mega-menu, and a slide-in mobile drawer adapt to your screen.</p></article>
-              <article class="feature-card"><h3>Find your place</h3><p>Section links, breadcrumbs, and active states help show where you are and where to go next.</p></article>
-              <article class="feature-card"><h3>Useful destinations</h3><p>Open curated reference, shopping, browser, and AI websites from one link directory.</p></article>
-              <article class="feature-card"><h3>Accessible by design</h3><p>Keyboard-friendly controls, clear focus indicators, labelled landmarks, and reduced-motion support are built in.</p></article>
-              <article class="feature-card"><h3>Customizable menus</h3><p>One JSON menu configuration powers the header, sidebar, and mobile drawer, with a built-in fallback.</p></article>
-              <article class="feature-card"><h3>Personal touch</h3><p>CSS-only tabs, emoji ratings, contact cards, and an About note saved locally in your browser.</p></article>
+              <article class="feature-card"><h3>Discover opportunities</h3><p>Explore trends, communities, and new products to find problems people care about.</p></article>
+              <article class="feature-card"><h3>Collect inspiration</h3><p>Use places like Pinterest and Product Hunt to gather references and see what makers are building.</p></article>
+              <article class="feature-card"><h3>Shape your idea</h3><p>Find tools for visual identity, prototypes, websites, planning, and your first launch.</p></article>
+              <article class="feature-card"><h3>Keep learning</h3><p>Browse practical courses, founder communities, and AI tools as you develop your skills.</p></article>
+              <article class="feature-card"><h3>Navigate with ease</h3><p>Search the curated directory or follow clear sections from inspiration through launch.</p></article>
+              <article class="feature-card"><h3>Start at your own pace</h3><p>Wayfinder is a starting point for exploration—not business advice or a guarantee of success.</p></article>
             </div>
           </div>
           <div class="about-editor">
-            <label for="about-copy">Your Wayfinder note</label>
-            <p>Add a short introduction or message for visitors. It is saved only in this browser.</p>
-            <textarea id="about-copy" placeholder="Write a short introduction about your organization, team, or work."></textarea>
-            <p id="about-save-status" aria-live="polite">Your text saves automatically on this device.</p>
+            <label for="about-copy">Your founder note</label>
+            <p>Make this space yours: add a business idea, goal, or reminder. It is saved only in this browser.</p>
+            <textarea id="about-copy" placeholder="What are you curious about building? Add an idea, question, or next step."></textarea>
+            <p id="about-save-status" aria-live="polite">Your note saves automatically on this device.</p>
           </div>
         </section>
 
         <section class="panel" id="reviews" aria-labelledby="reviews-title">
-          <h2 id="reviews-title">Leave a little love</h2>
-          <p class="review-intro">Pick the emoji that fits your visit, then leave a note if you like. Your reviews are saved only in this browser.</p>
+          <h2 id="reviews-title">Help improve the founder toolkit</h2>
+          <p class="review-intro">Was a resource useful? Tell us what helped you explore an idea, and what you would like to find next. Your feedback is saved only in this browser.</p>
           <div class="review-summary" aria-live="polite">
             <span class="review-average" id="review-average">—</span>
             <span class="review-stars" id="review-stars" aria-label="No ratings yet">☆☆☆☆☆</span>
@@ -1047,7 +1228,7 @@
           </div>
           <form class="review-form" id="review-form">
             <fieldset class="emoji-rating">
-              <legend>How was your experience? <span aria-hidden="true">(choose one)</span></legend>
+              <legend>How useful was Wayfinder today? <span aria-hidden="true">(choose one)</span></legend>
               <div class="rating-options">
                 <label class="rating-choice" for="rating-1">
                   <input id="rating-1" type="radio" name="rating" value="1" required>
@@ -1072,28 +1253,27 @@
               </div>
               <p class="review-hint" id="rating-feedback" aria-live="polite">Click an emoji to choose your rating.</p>
             </fieldset>
-            <label for="review-text">Your review <span class="review-hint">(optional)</span></label>
-            <textarea id="review-text" name="review" maxlength="500" placeholder="What made your visit memorable?"></textarea>
-            <button class="review-submit" type="submit">Share your review</button>
+            <label for="review-text">Your founder feedback <span class="review-hint">(optional)</span></label>
+            <textarea id="review-text" name="review" maxlength="500" placeholder="What resource or idea would make this directory more useful?"></textarea>
+            <button class="review-submit" type="submit">Save feedback</button>
             <p class="review-status" id="review-status" aria-live="polite">Your feedback stays on this device.</p>
           </form>
           <div class="review-list" id="review-list" role="list" aria-label="Saved reviews"></div>
         </section>
 
         <section class="panel" id="schema" aria-labelledby="schema-title">
-          <h2 id="schema-title">Menu schema</h2>
-          <pre><code>CREATE TABLE menus (
-  id INTEGER PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  location VARCHAR(100) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);</code></pre>
+          <h2 id="schema-title">How to use Wayfinder</h2>
+          <p>Wayfinder is a curated starting point, not a shortcut to a guaranteed business. Use the directory to explore, then verify what you learn with people and small real-world tests.</p>
+          <ol class="activity-list">
+            <li><span class="activity-marker" aria-hidden="true">1</span><div><strong>Choose a direction</strong><p>Start with a customer, interest, or problem you want to understand.</p></div></li>
+            <li><span class="activity-marker" aria-hidden="true">2</span><div><strong>Explore the right resources</strong><p>Use the search field or founder toolkit to find research, design, learning, and launch links.</p></div></li>
+            <li><span class="activity-marker" aria-hidden="true">3</span><div><strong>Take one small action</strong><p>Talk to a potential customer, sketch a solution, or test a simple first version.</p></div></li>
+          </ol>
         </section>
 
         <section class="panel" id="contacts" aria-labelledby="contacts-title">
-          <h2 id="contacts-title">Contacts</h2>
-          <p>Questions? Reach out or find the campus on the map.</p>
-          <p><a href="https://www.google.com/maps/search/?api=1&amp;query=MITS+Gwalior" target="_blank" rel="noopener noreferrer">Open campus map</a></p>
+          <h2 id="contacts-title">Connect with Wayfinder</h2>
+          <p>Have a suggestion for a useful founder resource, or a note about your experience? Reach out to the Wayfinder team.</p>
           <div class="contact-list" id="contact-list">
             <section class="contact-card">
               <h3>Akshata Agrawal</h3>
@@ -1120,60 +1300,55 @@
           "items": [
             { "label": "Home", "href": "#main" },
             {
-              "label": "Products",
+              "label": "Explore",
               "type": "dropdown",
               "trigger": ["hover", "click"],
               "items": [
                 {
-                  "label": "Navigation",
+                  "label": "Explore the journey",
                   "items": [
-                    { "label": "Menus", "href": "#menus" },
-                    { "label": "Tabs", "href": "#tabs" },
-                    { "label": "Breadcrumbs", "href": "#breadcrumbs" }
+                    { "label": "Find and validate ideas", "href": "#idea-discovery" },
+                    { "label": "Design your brand", "href": "#brand-design" },
+                    { "label": "Build and launch", "href": "#build-launch" }
                   ]
                 },
                 {
-                  "label": "Site pages",
+                  "label": "Founder resources",
                   "items": [
-                    { "label": "Websites", "href": "#websites" },
-                    { "label": "About", "href": "#about" },
-                    { "label": "Reviews", "href": "#reviews" },
-                    { "label": "Menu schema", "href": "#schema" },
-                    { "label": "Contacts", "href": "#contacts" }
+                    { "label": "Learn new skills", "href": "#education-links" },
+                    { "label": "Explore AI tools", "href": "#ai-links" },
+                    { "label": "Browse marketplaces", "href": "#shopping-links" }
                   ]
                 }
               ]
             },
             {
-              "label": "More",
+              "label": "Founder toolkit",
               "type": "mega-menu",
-              "title": "Explore every section",
+              "title": "From first spark to first launch",
               "items": [
                 {
-                  "label": "Components",
+                  "label": "Discover an opportunity",
                   "items": [
-                    { "label": "Dropdown and mega menu", "href": "#menus" },
-                    { "label": "Tabs", "href": "#tabs" },
-                    { "label": "Breadcrumbs", "href": "#breadcrumbs" },
-                    { "label": "Menu schema", "href": "#schema" }
+                    { "label": "Find and validate ideas", "href": "#idea-discovery" },
+                    { "label": "Learn from useful content", "href": "#reference-links" },
+                    { "label": "Build your skills", "href": "#education-links" }
                   ]
                 },
                 {
-                  "label": "Website directory",
+                  "label": "Create your first version",
                   "items": [
-                    { "label": "All websites", "href": "#websites" },
-                    { "label": "Reference & video", "href": "#reference-links" },
-                    { "label": "Shopping", "href": "#shopping-links" },
-                    { "label": "Browsers", "href": "#browser-links" },
-                    { "label": "AI tools", "href": "#ai-links" }
+                    { "label": "Design and brand", "href": "#brand-design" },
+                    { "label": "Build and launch", "href": "#build-launch" },
+                    { "label": "Use AI to explore and create", "href": "#ai-links" }
                   ]
                 },
                 {
-                  "label": "About Wayfinder",
+                  "label": "Keep moving forward",
                   "items": [
-                    { "label": "Features and About", "href": "#about" },
-                    { "label": "Reviews and ratings", "href": "#reviews" },
-                    { "label": "Contacts", "href": "#contacts" }
+                    { "label": "Explore commerce platforms", "href": "#shopping-links" },
+                    { "label": "About Wayfinder", "href": "#about" },
+                    { "label": "Contact the Wayfinder team", "href": "#contacts" }
                   ]
                 }
               ]
@@ -1183,17 +1358,17 @@
           ]
         },
         {
-          "name": "Component navigation",
+          "name": "Founder resource navigation",
           "location": "sidebar",
           "created_at": "2026-11-18T00:00:00Z",
           "items": [
-            { "label": "Menus", "href": "#menus" },
-            { "label": "Tabs", "href": "#tabs" },
-            { "label": "Breadcrumbs", "href": "#breadcrumbs" },
-            { "label": "Data", "href": "#schema" },
-            { "label": "Websites", "href": "#websites" },
-            { "label": "Reviews", "href": "#reviews" },
-            { "label": "Contacts", "href": "#contacts" }
+            { "label": "Find and validate", "href": "#idea-discovery" },
+            { "label": "Design and brand", "href": "#brand-design" },
+            { "label": "Build and launch", "href": "#build-launch" },
+            { "label": "Learning resources", "href": "#education-links" },
+            { "label": "All resources", "href": "#websites" },
+            { "label": "About Wayfinder", "href": "#about" },
+            { "label": "Share feedback", "href": "#reviews" }
           ]
         },
         {
@@ -1205,59 +1380,54 @@
           "items": [
             { "label": "Home", "href": "#main" },
             {
-              "label": "Products",
+              "label": "Explore",
               "type": "dropdown",
               "items": [
                 {
-                  "label": "Navigation",
+                  "label": "Explore the journey",
                   "items": [
-                    { "label": "Menus", "href": "#menus" },
-                    { "label": "Tabs", "href": "#tabs" },
-                    { "label": "Breadcrumbs", "href": "#breadcrumbs" }
+                    { "label": "Find and validate ideas", "href": "#idea-discovery" },
+                    { "label": "Design your brand", "href": "#brand-design" },
+                    { "label": "Build and launch", "href": "#build-launch" }
                   ]
                 },
                 {
-                  "label": "Site pages",
+                  "label": "Founder resources",
                   "items": [
-                    { "label": "Websites", "href": "#websites" },
-                    { "label": "About", "href": "#about" },
-                    { "label": "Reviews", "href": "#reviews" },
-                    { "label": "Menu schema", "href": "#schema" },
-                    { "label": "Contacts", "href": "#contacts" }
+                    { "label": "Learn new skills", "href": "#education-links" },
+                    { "label": "Explore AI tools", "href": "#ai-links" },
+                    { "label": "Browse marketplaces", "href": "#shopping-links" }
                   ]
                 }
               ]
             },
             {
-              "label": "More",
+              "label": "Founder toolkit",
               "type": "mega-menu",
-              "title": "Explore every section",
+              "title": "From first spark to first launch",
               "items": [
                 {
-                  "label": "Components",
+                  "label": "Discover an opportunity",
                   "items": [
-                    { "label": "Dropdown and mega menu", "href": "#menus" },
-                    { "label": "Tabs", "href": "#tabs" },
-                    { "label": "Breadcrumbs", "href": "#breadcrumbs" },
-                    { "label": "Menu schema", "href": "#schema" }
+                    { "label": "Find and validate ideas", "href": "#idea-discovery" },
+                    { "label": "Learn from useful content", "href": "#reference-links" },
+                    { "label": "Build your skills", "href": "#education-links" }
                   ]
                 },
                 {
-                  "label": "Website directory",
+                  "label": "Create your first version",
                   "items": [
-                    { "label": "All websites", "href": "#websites" },
-                    { "label": "Reference & video", "href": "#reference-links" },
-                    { "label": "Shopping", "href": "#shopping-links" },
-                    { "label": "Browsers", "href": "#browser-links" },
-                    { "label": "AI tools", "href": "#ai-links" }
+                    { "label": "Design and brand", "href": "#brand-design" },
+                    { "label": "Build and launch", "href": "#build-launch" },
+                    { "label": "Use AI to explore and create", "href": "#ai-links" }
                   ]
                 },
                 {
-                  "label": "About Wayfinder",
+                  "label": "Keep moving forward",
                   "items": [
-                    { "label": "Features and About", "href": "#about" },
-                    { "label": "Reviews and ratings", "href": "#reviews" },
-                    { "label": "Contacts", "href": "#contacts" }
+                    { "label": "Explore commerce platforms", "href": "#shopping-links" },
+                    { "label": "About Wayfinder", "href": "#about" },
+                    { "label": "Contact the Wayfinder team", "href": "#contacts" }
                   ]
                 }
               ]
@@ -1289,10 +1459,75 @@
     const configElement = document.querySelector("#navigation-config");
     const fallbackConfig = JSON.parse(configElement.textContent);
     const primaryNav = document.querySelector("#primary-nav");
-    const mobileNav = document.querySelector("#mobile-nav");
+    const mobileDialog = document.querySelector("#mobile-nav");
+    const mobileNav = document.querySelector("#mobile-nav-links");
     const sidebarNav = document.querySelector("#sidebar-links");
     const contactList = document.querySelector("#contact-list");
-    const drawerToggle = document.querySelector("#drawer-toggle");
+    const drawerToggle = document.querySelector(".menu-button");
+    const drawerClose = document.querySelector(".drawer-close");
+    drawerToggle.addEventListener("click", () => {
+      if (typeof mobileDialog.showModal === "function") mobileDialog.showModal();
+    });
+    drawerClose.addEventListener("click", () => mobileDialog.close());
+    mobileDialog.addEventListener("click", event => {
+      if (event.target === mobileDialog) mobileDialog.close();
+    });
+
+    const tabViewport = document.querySelector(".tab-viewport");
+    const tabLinks = [...document.querySelectorAll(".tab-labels [role='tab']")];
+    if (tabViewport && tabLinks.length) {
+      tabLinks.forEach((tab, index) => {
+        tab.addEventListener("keydown", event => {
+          let next = index;
+          if (event.key === "ArrowRight") next = (index + 1) % tabLinks.length;
+          if (event.key === "ArrowLeft") next = (index - 1 + tabLinks.length) % tabLinks.length;
+          if (event.key === "Home") next = 0;
+          if (event.key === "End") next = tabLinks.length - 1;
+          if (next !== index) {
+            event.preventDefault();
+            tabLinks[next].focus();
+            tabLinks[next].click();
+          }
+        });
+      });
+      tabViewport.addEventListener("scroll", () => {
+        const index = Math.round(tabViewport.scrollLeft / tabViewport.clientWidth);
+        tabLinks.forEach((tab, tabIndex) => {
+          const active = tabIndex === index;
+          tab.setAttribute("aria-selected", String(active));
+          if (active) tab.setAttribute("aria-current", "page");
+          else tab.removeAttribute("aria-current");
+        });
+      }, { passive: true });
+    }
+
+    const portalSearch = document.querySelector("#portal-search-input");
+    if (portalSearch) {
+      const searchCards = [...document.querySelectorAll("[data-search]")];
+      const applySearch = () => {
+        const query = portalSearch.value.trim().toLowerCase();
+        searchCards.forEach(card => {
+          const text = `${card.dataset.search} ${card.textContent}`.toLowerCase();
+          card.hidden = Boolean(query) && !text.includes(query);
+        });
+        document.querySelectorAll(".link-category").forEach(category => {
+          const hasVisibleLinks = [...category.querySelectorAll("[data-search]")].some(card => !card.hidden);
+          category.hidden = Boolean(query) && !hasVisibleLinks;
+        });
+      };
+      portalSearch.addEventListener("input", applySearch);
+      document.addEventListener("keydown", event => {
+        if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+          event.preventDefault();
+          portalSearch.focus();
+        }
+        if (event.key === "Escape" && document.activeElement === portalSearch) {
+          portalSearch.value = "";
+          applySearch();
+          portalSearch.blur();
+        }
+      });
+    }
     const aboutCopy = document.querySelector("#about-copy");
     const aboutSaveStatus = document.querySelector("#about-save-status");
     const aboutStorageKey = "navigation-about-copy";
@@ -1314,14 +1549,6 @@
     };
     let savedReviews = [];
     let reviewStorageReady = true;
-
-    document.querySelector(".locate-link").addEventListener("click", () => {
-      const siteHeader = document.querySelector("#site-home");
-      siteHeader.scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
-      });
-      siteHeader.focus({ preventScroll: true });
-    });
 
     function safeHref(value) {
       return typeof value === "string" &&
@@ -1362,14 +1589,24 @@
       if (!item || typeof item.label !== "string") return null;
       if (!Array.isArray(item.items)) return createLink(item);
 
-      const group = document.createElement("details");
+      const group = document.createElement("div");
       group.className = "nav-dropdown";
 
-      const summary = document.createElement("summary");
-      summary.textContent = item.label;
+      const id = `nav-${String(item.label).toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${createNavItem.sequence++}`;
+      const trigger = document.createElement("button");
+      trigger.type = "button";
+      trigger.className = "nav-popover-trigger";
+      trigger.style.setProperty("anchor-name", `--${id}-trigger`);
+      trigger.textContent = item.label;
+      trigger.setAttribute("popovertarget", id);
+      trigger.setAttribute("aria-haspopup", "true");
+      trigger.setAttribute("aria-expanded", "false");
 
       const menu = document.createElement("div");
-      menu.className = item.type === "mega-menu" ? "dropdown-menu mega-menu" : "dropdown-menu";
+      menu.className = item.type === "mega-menu" ? "dropdown-menu mega-menu nav-popover" : "dropdown-menu nav-popover";
+      menu.id = id;
+      menu.style.setProperty("position-anchor", `--${id}-trigger`);
+      menu.setAttribute("popover", "");
       if (item.type === "mega-menu") {
         const heading = document.createElement("h2");
         heading.textContent = item.title || item.label;
@@ -1377,9 +1614,16 @@
       }
 
       menu.append(createMenuList(item.items));
-      group.append(summary, menu);
+      trigger.addEventListener("toggle", () => {
+        trigger.setAttribute("aria-expanded", String(menu.matches(":popover-open")));
+      });
+      menu.addEventListener("toggle", () => {
+        trigger.setAttribute("aria-expanded", String(menu.matches(":popover-open")));
+      });
+      group.append(trigger, menu);
       return group;
     }
+    createNavItem.sequence = 0;
 
     function renderLinks(container, items, builder) {
       container.replaceChildren();
@@ -1429,14 +1673,8 @@
       if (!header || !Array.isArray(header.items)) return;
       renderLinks(primaryNav, header.items, createNavItem);
       if (drawer && typeof drawer.id === "string" && /^[A-Za-z][A-Za-z0-9_-]*$/.test(drawer.id)) {
-        mobileNav.id = drawer.id;
+        mobileDialog.id = drawer.id;
         drawerToggle.setAttribute("aria-controls", drawer.id);
-        document.querySelector(".menu-button").setAttribute("aria-controls", drawer.id);
-      }
-      if (drawer && typeof drawer.toggle_id === "string" && /^[A-Za-z][A-Za-z0-9_-]*$/.test(drawer.toggle_id)) {
-        drawerToggle.id = drawer.toggle_id;
-        document.querySelector(".menu-button").htmlFor = drawer.toggle_id;
-        document.querySelector(".drawer-backdrop").htmlFor = drawer.toggle_id;
       }
       renderLinks(mobileNav, drawer && Array.isArray(drawer.items) ? drawer.items : header.items, createNavItem);
       if (sidebar && Array.isArray(sidebar.items)) {
@@ -1473,6 +1711,11 @@
           const summary = group.querySelector("summary");
           if (group.querySelector('[aria-current="page"]')) summary.setAttribute("aria-current", "page");
           else summary.removeAttribute("aria-current");
+        });
+        container.querySelectorAll(".nav-popover-trigger").forEach(trigger => {
+          const group = trigger.parentElement;
+          if (group.querySelector('[aria-current="page"]')) trigger.setAttribute("aria-current", "page");
+          else trigger.removeAttribute("aria-current");
         });
       });
     }
@@ -1512,7 +1755,7 @@
 
       clickedNavigationLink = link;
       updateActiveLinks(link.getAttribute("href"), clickedNavigationLink);
-      if (mobileNav.contains(link)) drawerToggle.checked = false;
+      if (mobileNav.contains(link) && mobileDialog.open) mobileDialog.close();
     });
     try {
       aboutCopy.value = localStorage.getItem(aboutStorageKey) || "";
@@ -1581,7 +1824,7 @@
         reviewList.append(card);
       });
     }
-
+    
     try {
       savedReviews = readStoredReviews();
       renderReviews();
@@ -1630,6 +1873,6 @@
       reviewStatus.textContent = "Thank you — your review is saved on this device.";
     });
   </script>
-  <footer>Wayfinder — a friendly starting point for the web</footer>
+  <footer>Wayfinder — a thoughtful starting point for your next idea.</footer>
 </body>
 </html>
